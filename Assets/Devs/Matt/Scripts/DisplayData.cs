@@ -31,7 +31,23 @@ public class DisplayData : MonoBehaviour
 
     void Update()
     {
-        //positionL.text = "Position: " + PositionL.ToString();
+        //Left Side
+        positionL.text = "Position: " + record.PositionL.ToString();
+        rotationL.text = "Rotation: " + record.RotationL.ToString();
+        gripL.text = "Grip value: " + record.GripL.ToString();
+        triggerL.text = "Trigger value: " + record.TriggerL.ToString();
+        joystickL.text = "Joystick value: " + record.JoystickL.ToString();
+        yButton.text = "Y button: " + record.Ybutton.ToString();
+        xButton.text = "X button: " + record.Xbutton.ToString();
+
+        //Right Side
+        positionR.text = "Position: " + record.PositionR.ToString();
+        rotationR.text = "Rotation: " + record.RotationR.ToString();
+        gripR.text = "Grip value: " + record.GripR.ToString();
+        triggerR.text = "Trigger value: " + record.TriggerR.ToString();
+        joystickR.text = "Joystick value: " + record.JoystickR.ToString();
+        bButton.text = "B button: " + record.Bbutton.ToString();
+        aButton.text = "A button: " + record.Abutton.ToString();
 
     }
 }

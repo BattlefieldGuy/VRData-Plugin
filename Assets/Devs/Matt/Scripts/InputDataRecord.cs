@@ -23,6 +23,10 @@ public class InputDataRecord : MonoBehaviour
     public bool Bbutton;
     public bool Abutton;
 
+    [Header("Head")]
+    public Vector3 PositionH;
+    public Quaternion RotationH;
+
 
     private InputData inputData;
 
@@ -51,47 +55,36 @@ public class InputDataRecord : MonoBehaviour
         inputData.LeftController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 positionL);
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationL);
-        //RotationL.text = "Rotation: " + RotationL.ToString();
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.grip, out GripL);
-        //GripL.text = "Grip value: " + GripL.ToString();
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.trigger, out TriggerL);
-        //TriggerL.text = "Trigger value: " + TriggerL.ToString();
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.primary2DAxis, out JoystickL);
-        //JoystickL.text = "Joystick value: " + JoystickL.ToString();
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.secondaryButton, out Ybutton);
-        //YButton.text = "Y button: " + Ybutton.ToString();
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.primaryButton, out Xbutton);
-        //XButton.text = "X button: " + Xbutton.ToString();
 
         //RightSide
         inputData.RightController.TryGetFeatureValue(CommonUsages.devicePosition, out PositionR);
-        //PositionR.text = "Position: " + PositionR.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationR);
-        //RotationR.text = "Rotation: " + RotationR.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.grip, out GripR);
-        //GripR.text = "Grip value: " + GripR.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.trigger, out TriggerR);
-        //TriggerR.text = "Trigger value: " + TriggerR.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.primary2DAxis, out JoystickR);
-        //JoystickR.text = "Joystick value: " + JoystickR.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.secondaryButton, out Bbutton);
-        //BButton.text = "B button: " + Bbutton.ToString();
 
         inputData.RightController.TryGetFeatureValue(CommonUsages.primaryButton, out Abutton);
-        //AButton.text = "A button: " + Abutton.ToString();
 
+        //Head
+        inputData.HMD.TryGetFeatureValue(CommonUsages.devicePosition, out PositionH);
 
+        inputData.HMD.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationH);
 
-        //if (inputData.HMD.TryGetFeatureUsages(CommonUsages.))
     }
 }
