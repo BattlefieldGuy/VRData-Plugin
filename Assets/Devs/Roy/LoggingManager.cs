@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine;
 
 public class LoggingManager : MonoBehaviour
 {
@@ -83,7 +84,7 @@ public class LoggingManager : MonoBehaviour
         string fullPath = Path.Combine(folderPath, autosaveFileName);
         string json = JsonConvert.SerializeObject(logEntries, Formatting.Indented);
         File.WriteAllText(fullPath, json);
-        Debug.Log("Autosaved " + fileName + " to: " + folderPath);
+        Debug.Log("Autosaved " + autosaveFileName + " to: " + folderPath);
     }
 
     void OnApplicationQuit()

@@ -29,8 +29,8 @@ public class LogEntries : MonoBehaviour
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Position", DisplayInputData.Instance.positionL },
-                        { "Rotation", DisplayInputData.Instance.rotationL }
+                        { "Position", InputDataRecord.Instance.PositionL },
+                        { "Rotation", InputDataRecord.Instance.RotationL }
                     }
                 );
 
@@ -39,129 +39,129 @@ public class LogEntries : MonoBehaviour
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Position", DisplayInputData.Instance.positionL },
-                        { "Rotation", DisplayInputData.Instance.rotationL }
+                        { "Position", InputDataRecord.Instance.PositionL },
+                        { "Rotation", InputDataRecord.Instance.RotationL }
                     }
                 );
                 timer = 0f;
             }
 
-            if (DisplayInputData.Instance.gripL >= triggerThreshold)
+            if (InputDataRecord.Instance.GripL >= triggerThreshold)
             {
                 LoggingManager.Instance.AddEntry(
                     "Left Grip",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Triggered", DisplayInputData.Instance.gripL }
+                        { "Triggered", InputDataRecord.Instance.GripL }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.gripL >= triggerThreshold)
+            if (InputDataRecord.Instance.GripL >= triggerThreshold)
             {
                 LoggingManager.Instance.AddEntry(
                     "Right Grip",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Triggered", DisplayInputData.Instance.gripR }
+                        { "Triggered", InputDataRecord.Instance.GripR }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.triggerL >= triggerThreshold)
+            if (InputDataRecord.Instance.TriggerL >= triggerThreshold)
             {
                 LoggingManager.Instance.AddEntry(
                     "Left Trigger",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Triggered", DisplayInputData.Instance.triggerL }
+                        { "Triggered", InputDataRecord.Instance.TriggerL }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.triggerR >= triggerThreshold)
+            if (InputDataRecord.Instance.TriggerR >= triggerThreshold)
             {
                 LoggingManager.Instance.AddEntry(
                     "Left Trigger",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Triggered", DisplayInputData.Instance.triggerL }
+                        { "Triggered", InputDataRecord.Instance.TriggerL }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.joystickL.x >= deadzone || DisplayInputData.Instance.joystickL.y >= deadzone)
+            if (InputDataRecord.Instance.JoystickL.x >= deadzone || InputDataRecord.Instance.JoystickL.y >= deadzone)
             {
                 LoggingManager.Instance.AddEntry(
                     "Left Joystick",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.joystickL }
+                        { "Input", InputDataRecord.Instance.JoystickL }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.joystickR.x >= deadzone || DisplayInputData.Instance.joystickR.y >= deadzone)
+            if (InputDataRecord.Instance.JoystickR.x >= deadzone || InputDataRecord.Instance.JoystickR.y >= deadzone)
             {
                 LoggingManager.Instance.AddEntry(
                     "Right Joystick",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.joystickR }
+                        { "Input", InputDataRecord.Instance.JoystickR }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.Ybutton)
+            if (InputDataRecord.Instance.Ybutton)
             {
                 LoggingManager.Instance.AddEntry(
                     "Y Button",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.Ybutton }
+                        { "Input", InputDataRecord.Instance.Ybutton }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.Xbutton)
+            if (InputDataRecord.Instance.Xbutton)
             {
                 LoggingManager.Instance.AddEntry(
                     "X Button",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.Xbutton }
+                        { "Input", InputDataRecord.Instance.Xbutton }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.Bbutton)
+            if (InputDataRecord.Instance.Bbutton)
             {
                 LoggingManager.Instance.AddEntry(
                     "B Button",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.Bbutton }
+                        { "Input", InputDataRecord.Instance.Bbutton }
                     }
                 );
             }
 
-            if (DisplayInputData.Instance.Abutton)
+            if (InputDataRecord.Instance.Abutton)
             {
                 LoggingManager.Instance.AddEntry(
                     "A Button",
                     new Dictionary<string, object>
                     {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", DisplayInputData.Instance.Abutton }
+                        { "Input", InputDataRecord.Instance.Abutton }
                     }
                 );
             }
