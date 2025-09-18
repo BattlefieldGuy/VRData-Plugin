@@ -18,129 +18,129 @@ public class LogEntries : MonoBehaviour
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Position" },
-                { "Left Controller Position", DisplayInputData.Instance.positionL }
+                { "Left Controller Position", global::InputDataRecord.Instance.PositionL }
             });
 
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Position" },
-                { "Right Controller Position", DisplayInputData.Instance.positionR }
+                { "Right Controller Position", InputDataRecord.Instance.PositionR }
             });
 
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Rotation" },
-                { "Left Controller Rotation", DisplayInputData.Instance.rotationL }
+                { "Left Controller Rotation", InputDataRecord.Instance.RotationL }
             });
 
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Rotation" },
-                { "Right Controller Rotation", DisplayInputData.Instance.rotationR }
+                { "Right Controller Rotation", InputDataRecord.Instance.RotationR }
             });
             timer = 0f;
         }
 
-        if (DisplayInputData.Instance.gripL >= triggerThreshold)
+        if (InputDataRecord.Instance.GripL >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Left Grip" },
-                { "Left Grip Pressed", DisplayInputData.Instance.gripL }
+                { "Left Grip Pressed", InputDataRecord.Instance.GripL }
             });
         }
 
-        if (DisplayInputData.Instance.gripL >= triggerThreshold)
+        if (InputDataRecord.Instance.GripL >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Right Grip" },
-                { "Right Grip Pressed", DisplayInputData.Instance.gripR }
+                { "Right Grip Pressed", InputDataRecord.Instance.GripR }
             });
         }
 
-        if (DisplayInputData.Instance.triggerL >= triggerThreshold)
+        if (InputDataRecord.Instance.TriggerL >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Left Trigger" },
-                { "Left Trigger Pressed", DisplayInputData.Instance.triggerL }
+                { "Left Trigger Pressed", InputDataRecord.Instance.TriggerL }
             });
         }
 
-        if (DisplayInputData.Instance.triggerR >= triggerThreshold)
+        if (InputDataRecord.Instance.TriggerR >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Right Trigger" },
-                { "Right Trigger Pressed", DisplayInputData.Instance.triggerR }
+                { "Right Trigger Pressed", InputDataRecord.Instance.TriggerR }
             });
         }
 
-        if (DisplayInputData.Instance.joystickL != Vector2.zero)
+        if (InputDataRecord.Instance.JoystickL != Vector2.zero)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Left Joystick" },
-                { "Right Joystick Moved", DisplayInputData.Instance.joystickL }
+                { "Right Joystick Moved", InputDataRecord.Instance.JoystickL }
             });
         }
 
-        if (DisplayInputData.Instance.joystickR != Vector2.zero)
+        if (InputDataRecord.Instance.JoystickR != Vector2.zero)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Right Joystick" },
-                { "Right Joystick Moved", DisplayInputData.Instance.joystickR }
+                { "Right Joystick Moved", InputDataRecord.Instance.JoystickR }
             });
         }
 
-        if (DisplayInputData.Instance.Ybutton)
+        if (InputDataRecord.Instance.Ybutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Y Button" },
-                { "Y Button Pressed", DisplayInputData.Instance.Ybutton }
+                { "Y Button Pressed", InputDataRecord.Instance.Ybutton }
             });
         }
 
-        if (DisplayInputData.Instance.Xbutton)
+        if (InputDataRecord.Instance.Xbutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "X Button" },
-                { "X Button Pressed", DisplayInputData.Instance.Xbutton }
+                { "X Button Pressed", InputDataRecord.Instance.Xbutton }
             });
         }
 
-        if (DisplayInputData.Instance.Bbutton)
+        if (InputDataRecord.Instance.Bbutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "B Button" },
-                { "B Button Pressed", DisplayInputData.Instance.Bbutton }
+                { "B Button Pressed", InputDataRecord.Instance.Bbutton }
             });
         }
 
-        if (DisplayInputData.Instance.Abutton)
+        if (InputDataRecord.Instance.Abutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "A Button" },
-                { "A Button Pressed", DisplayInputData.Instance.Abutton }
+                { "A Button Pressed", InputDataRecord.Instance.Abutton }
             });
         }
     }
