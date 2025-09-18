@@ -11,6 +11,8 @@ public class LoggingManager : MonoBehaviour
     public string folderPath;
     public string fileName;
     private Vector3 position = new Vector3(0, 0, 0);
+    [Tooltip("Frequency in seconds for autosaving log data. Set to 0 to disable autosave. Setting autosave frequency to a low value may impact performance depending on the frequency of log entries.")]
+    public float autosaveFrequency = 10f;
 
     private void Awake()
     {
@@ -36,6 +38,15 @@ public class LoggingManager : MonoBehaviour
     #endif
     }
 
+    private void Update()
+    {
+        if (Time.time % autosaveFrequency < 0.02f && logEntries.Count > 0)
+        {
+            Autosave();
+        }
+            
+    }
+
     public void AddEntry(Dictionary<string, object> entry)
     {
         logEntries.Add(entry);
@@ -44,6 +55,29 @@ public class LoggingManager : MonoBehaviour
     public void RemoveEntry(Dictionary<string, object> entry)
     {
         logEntries.Remove(entry);
+    }
+
+    private void Autosave()
+    {
+        // Convert entries to a serializable format
+        var serializableEntries = new List<SerializableEntry>();
+        foreach (var entry in logEntries)
+        {
+            serializableEntries.Add(new SerializableEntry(entry));
+        }
+        
+        // Ensure file ends with .json
+        if (!fileName.EndsWith(".json"))
+        {
+            fileName += ".json";
+        }
+
+        string fullPath = Path.Combine(folderPath, fileName);
+        
+        string json = JsonUtility.ToJson(new SerializableEntryList { entries = serializableEntries }, true);
+        File.WriteAllText(fullPath, json);
+        Debug.Log("Autosaved " + fileName + " to: " + folderPath);
+        
     }
 
     void OnApplicationQuit()
