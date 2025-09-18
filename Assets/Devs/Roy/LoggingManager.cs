@@ -50,10 +50,11 @@ public class LoggingManager : MonoBehaviour
     private object ToSerializable(object value)
     {
         if (value is Vector3 v)
-            return v.ToString(); // or $"{v.x},{v.y},{v.z}"
+            return v.ToString();
         if (value is Quaternion q)
-            return q.ToString(); // or $"{q.x},{q.y},{q.z},{q.w}"
-        // Add more Unity types as needed
+            return q.ToString();
+        if (value is Vector2 v2)
+            return v2.ToString();
         return value;
     }
 
@@ -69,11 +70,6 @@ public class LoggingManager : MonoBehaviour
             entry[kvp.Key] = serializableValue;
         }
         logEntries.Add(entry);
-    }
-
-    public void RemoveEntry(Dictionary<string, object> entry)
-    {
-        logEntries.Remove(entry);
     }
 
     private void Autosave()
