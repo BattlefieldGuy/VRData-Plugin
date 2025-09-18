@@ -375,7 +375,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc3774e05065a4409b408bcab773d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  toggleLogging: 1
   logFrequency: 10
+  triggerThreshold: 0.3
+  deadzone: 0.5
 --- !u!114 &1742478227
 MonoBehaviour:
   m_ObjectHideFlags: 0
