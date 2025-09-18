@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
+using Newtonsoft.Json;
 
 public class LoggingManager : MonoBehaviour
 {
@@ -9,9 +9,9 @@ public class LoggingManager : MonoBehaviour
     private Toolbar toolbar;
     public string folderPath;
     public string fileName;
-    private Vector3 position = new Vector3(0, 0, 0);
     [Tooltip("Frequency in seconds for autosaving log data. Set to 0 to disable autosave. Setting autosave frequency to a low value may impact performance depending on the frequency of log entries.")]
     public float autosaveFrequency = 10f;
+    public string autosaveFileName = "autosave_logData.json";
 
     private void Awake()
     {
@@ -46,8 +46,27 @@ public class LoggingManager : MonoBehaviour
 
     }
 
-    public void AddEntry(Dictionary<string, object> entry)
+    private object ToSerializable(object value)
     {
+        if (value is Vector3 v)
+            return v.ToString(); // or $"{v.x},{v.y},{v.z}"
+        if (value is Quaternion q)
+            return q.ToString(); // or $"{q.x},{q.y},{q.z},{q.w}"
+        // Add more Unity types as needed
+        return value;
+    }
+
+    public void AddEntry(string eventName, Dictionary<string, object> entries)
+    {
+        string log = eventName + "\n";
+        var entry = new Dictionary<string, object>();
+        entry["Event"] = eventName;
+        foreach (var kvp in entries)
+        {
+            var serializableValue = ToSerializable(kvp.Value);
+            log += $"{kvp.Key}: {serializableValue}\n";
+            entry[kvp.Key] = serializableValue;
+        }
         logEntries.Add(entry);
     }
 
@@ -58,49 +77,25 @@ public class LoggingManager : MonoBehaviour
 
     private void Autosave()
     {
-        // Convert entries to a serializable format
-        var serializableEntries = new List<SerializableEntry>();
-        foreach (var entry in logEntries)
-        {
-            serializableEntries.Add(new SerializableEntry(entry));
-        }
-
-        // Ensure file ends with .json
         if (!fileName.EndsWith(".json"))
-        {
             fileName += ".json";
-        }
 
-        string fullPath = Path.Combine(folderPath, fileName);
-
-        string json = JsonUtility.ToJson(new SerializableEntryList { entries = serializableEntries }, true);
+        string fullPath = Path.Combine(folderPath, autosaveFileName);
+        string json = JsonConvert.SerializeObject(logEntries, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log("Autosaved " + fileName + " to: " + folderPath);
-
     }
 
     void OnApplicationQuit()
     {
-
-        // Convert entries to a serializable format
-        var serializableEntries = new List<SerializableEntry>();
-        foreach (var entry in logEntries)
-        {
-            serializableEntries.Add(new SerializableEntry(entry));
-        }
-
-        // Ensure file ends with .json
         if (!fileName.EndsWith(".json"))
-        {
             fileName += ".json";
-        }
 
         string fullPath = Path.Combine(folderPath, fileName);
         string baseName = Path.GetFileNameWithoutExtension(fileName);
         string ext = Path.GetExtension(fileName);
         int count = 1;
 
-        // Find a unique file name
         while (File.Exists(fullPath))
         {
             string tempFileName = $"{baseName}({count}){ext}";
@@ -108,7 +103,7 @@ public class LoggingManager : MonoBehaviour
             count++;
         }
 
-        string json = JsonUtility.ToJson(new SerializableEntryList { entries = serializableEntries }, true);
+        string json = JsonConvert.SerializeObject(logEntries, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log(fileName + " written to: " + folderPath);
     }
