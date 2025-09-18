@@ -158,7 +158,7 @@ namespace Devs.Roy
                 {
                     LoggingManager.Instance.AddEntry("Left Joystick Position", new Dictionary<string, object> {
                         { "Time", DateTime.Now.ToString("HH:mm:ss.fff") },
-                        { "Input", InputDataRecord.Instance.JoystickR }
+                        { "Input", InputDataRecord.Instance.JoystickL }
                     });
                     _joystickLLogTimer = 0f;
                 }
