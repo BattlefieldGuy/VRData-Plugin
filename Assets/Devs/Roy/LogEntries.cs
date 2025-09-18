@@ -18,33 +18,33 @@ public class LogEntries : MonoBehaviour
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Position" },
-                { "Left Controller Position", DisplayInputData.Instance.PositionL }
+                { "Left Controller Position", DisplayInputData.Instance.positionL }
             });
-            
+
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Position" },
-                { "Right Controller Position", DisplayInputData.Instance.PositionR }
+                { "Right Controller Position", DisplayInputData.Instance.positionR }
             });
-            
+
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Rotation" },
-                { "Left Controller Rotation", DisplayInputData.Instance.RotationL }
+                { "Left Controller Rotation", DisplayInputData.Instance.rotationL }
             });
-            
+
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
                 { "Timestamp", DateTime.Now.ToString("HH:mm:ss.fff") },
                 { "Event", "Controller Rotation" },
-                { "Right Controller Rotation", DisplayInputData.Instance.RotationR }
+                { "Right Controller Rotation", DisplayInputData.Instance.rotationR }
             });
             timer = 0f;
         }
-        
-        if(DisplayInputData.Instance.gripL >= triggerThreshold)
+
+        if (DisplayInputData.Instance.gripL >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
             {
@@ -63,7 +63,7 @@ public class LogEntries : MonoBehaviour
                 { "Right Grip Pressed", DisplayInputData.Instance.gripR }
             });
         }
-        
+
         if (DisplayInputData.Instance.triggerL >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -73,7 +73,7 @@ public class LogEntries : MonoBehaviour
                 { "Left Trigger Pressed", DisplayInputData.Instance.triggerL }
             });
         }
-        
+
         if (DisplayInputData.Instance.triggerR >= triggerThreshold)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -93,7 +93,7 @@ public class LogEntries : MonoBehaviour
                 { "Right Joystick Moved", DisplayInputData.Instance.joystickL }
             });
         }
-        
+
         if (DisplayInputData.Instance.joystickR != Vector2.zero)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -103,7 +103,7 @@ public class LogEntries : MonoBehaviour
                 { "Right Joystick Moved", DisplayInputData.Instance.joystickR }
             });
         }
-        
+
         if (DisplayInputData.Instance.Ybutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -113,7 +113,7 @@ public class LogEntries : MonoBehaviour
                 { "Y Button Pressed", DisplayInputData.Instance.Ybutton }
             });
         }
-        
+
         if (DisplayInputData.Instance.Xbutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -123,7 +123,7 @@ public class LogEntries : MonoBehaviour
                 { "X Button Pressed", DisplayInputData.Instance.Xbutton }
             });
         }
-        
+
         if (DisplayInputData.Instance.Bbutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
@@ -133,7 +133,7 @@ public class LogEntries : MonoBehaviour
                 { "B Button Pressed", DisplayInputData.Instance.Bbutton }
             });
         }
-        
+
         if (DisplayInputData.Instance.Abutton)
         {
             LoggingManager.Instance.AddEntry(new System.Collections.Generic.Dictionary<string, object>
