@@ -1,5 +1,3 @@
-using System;
-using System.Buffers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
@@ -37,7 +35,7 @@ public class DisplayInputData : MonoBehaviour
     public Vector2 joystickL;
     public bool Ybutton;
     public bool Xbutton;
-    
+
     [Header("RightSide")]
     public Vector3 positionR;
     public Quaternion rotationR;

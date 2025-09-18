@@ -1,7 +1,6 @@
-using System;
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 
 public class LoggingManager : MonoBehaviour
 {
@@ -29,13 +28,13 @@ public class LoggingManager : MonoBehaviour
 
     private void Start()
     {
-    #if UNITY_EDITOR
-            folderPath = UnityEditor.EditorPrefs.GetString("Toolbar_FolderPath", Application.persistentDataPath);
-            fileName = UnityEditor.EditorPrefs.GetString("Toolbar_FileName", "logData.json");
-    #else
+#if UNITY_EDITOR
+        folderPath = UnityEditor.EditorPrefs.GetString("Toolbar_FolderPath", Application.persistentDataPath);
+        fileName = UnityEditor.EditorPrefs.GetString("Toolbar_FileName", "logData.json");
+#else
         folderPath = Application.persistentDataPath;
         fileName = "logData.json";
-    #endif
+#endif
     }
 
     private void Update()
@@ -44,7 +43,7 @@ public class LoggingManager : MonoBehaviour
         {
             Autosave();
         }
-            
+
     }
 
     public void AddEntry(Dictionary<string, object> entry)
@@ -65,7 +64,7 @@ public class LoggingManager : MonoBehaviour
         {
             serializableEntries.Add(new SerializableEntry(entry));
         }
-        
+
         // Ensure file ends with .json
         if (!fileName.EndsWith(".json"))
         {
@@ -73,23 +72,23 @@ public class LoggingManager : MonoBehaviour
         }
 
         string fullPath = Path.Combine(folderPath, fileName);
-        
+
         string json = JsonUtility.ToJson(new SerializableEntryList { entries = serializableEntries }, true);
         File.WriteAllText(fullPath, json);
         Debug.Log("Autosaved " + fileName + " to: " + folderPath);
-        
+
     }
 
     void OnApplicationQuit()
     {
-        
+
         // Convert entries to a serializable format
         var serializableEntries = new List<SerializableEntry>();
         foreach (var entry in logEntries)
         {
             serializableEntries.Add(new SerializableEntry(entry));
         }
-        
+
         // Ensure file ends with .json
         if (!fileName.EndsWith(".json"))
         {
@@ -108,7 +107,7 @@ public class LoggingManager : MonoBehaviour
             fullPath = Path.Combine(folderPath, tempFileName);
             count++;
         }
-        
+
         string json = JsonUtility.ToJson(new SerializableEntryList { entries = serializableEntries }, true);
         File.WriteAllText(fullPath, json);
         Debug.Log(fileName + " written to: " + folderPath);
