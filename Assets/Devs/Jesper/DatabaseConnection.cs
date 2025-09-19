@@ -12,6 +12,20 @@ namespace Devs.Jesper
     public class ApiGetExample : MonoBehaviour
     {
         private const string BaseUrl = "http://localhost:3000";
+        public static ApiGetExample Instance;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         async void Start()
         {
@@ -20,30 +34,6 @@ namespace Devs.Jesper
             var api = this;
             string sessionData = await api.FetchSession(1);
             Debug.Log("Session Data: " + sessionData);
-
-            // Send some events
-            var events = new List<EventData>
-            {
-                new EventData
-                {
-                    controller = "left",
-                    eventType = "trigger_press",
-                    timestamp = DateTime.UtcNow.ToString("o"), // ISO8601
-                    controllerPositions = new { x = 0, y = 1, z = 2 },
-                    details = new { button = "trigger" }
-                },
-                new EventData
-                {
-                    controller = "right",
-                    eventType = "grip_press",
-                    timestamp = DateTime.UtcNow.ToString("o"),
-                    controllerPositions = new { x = 3, y = 4, z = 5 },
-                    details = new { button = "grip" }
-                }
-            };
-
-            bool success = await api.PostEvents(1, events);
-            Debug.Log("Posted events: " + success);
         }
 
         public async Task<string> FetchSession(int sessionId)
@@ -128,8 +118,8 @@ namespace Devs.Jesper
         public string controller;
         public string eventType;
         public string timestamp; // ISO8601 string is easiest
-        public object controllerPositions; // could be Vector3, etc., adjust to match server
-        public object details;
+        public float[] controllerPositions; // could be Vector3, etc., adjust to match server
+        public EventDetails details;
     }
 
     [Serializable]

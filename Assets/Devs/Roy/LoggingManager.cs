@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.IO;
+using Devs.Jesper;
 using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoggingManager : MonoBehaviour
 {
     public static LoggingManager Instance;
-    private List<Dictionary<string, object>> logEntries = new List<Dictionary<string, object>>();
-    private Toolbar toolbar;
+    private List<ApiClient.Position> positions = new List<ApiClient.Position>();
     public string folderPath;
     public string fileName;
-    [Tooltip("Frequency in seconds for autosaving log data. Set to 0 to disable autosave. Setting autosave frequency to a low value may impact performance depending on the frequency of log entries.")]
     public float autosaveFrequency = 10f;
     public string autosaveFileName = "autosave_logData.json";
+    public int sessionId = 1; // Set or generate as needed
 
     private void Awake()
     {
@@ -26,7 +26,38 @@ public class LoggingManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
+    public List<EventData> ToEventDataList()
+    {
+        var list = new List<EventData>();
+        foreach (var pos in positions)
+        {
+            bool isPosition = pos.pos != null && pos.rot != null && pos.pos.Length == 3 && pos.rot.Length == 4;
+            list.Add(new EventData
+            {
+                controller = pos.controller,
+                eventType = isPosition ? "position" : "event",
+                timestamp = pos.timestamp,
+                controllerPositions = isPosition ? pos.pos : null,
+                details = isPosition
+                    ? new EventDetails { rotation = pos.rot }
+                    : new EventDetails { button = "Pressed" } // Or set appropriately for button events
+            });
+        }
+        return list;
+    }
+    
+    public void AddGenericEntry(string controller, string timestamp, string state)
+    {
+        positions.Add(new ApiClient.Position
+        {
+            controller = controller,
+            timestamp = timestamp,
+            pos = new float[3], // or null if not applicable
+            rot = new float[4]  // or null if not applicable
+        });
+    }
+    
     private void Start()
     {
 #if UNITY_EDITOR
@@ -40,36 +71,21 @@ public class LoggingManager : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time % autosaveFrequency < 0.02f && logEntries.Count > 0)
+        if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && positions.Count > 0)
         {
             Autosave();
         }
-
     }
 
-    private object ToSerializable(object value)
+    public void AddEntry(string controller, string timestamp, Vector3 pos, Quaternion rot)
     {
-        if (value is Vector3 v)
-            return v.ToString();
-        if (value is Quaternion q)
-            return q.ToString();
-        if (value is Vector2 v2)
-            return v2.ToString();
-        return value;
-    }
-
-    public void AddEntry(string eventName, Dictionary<string, object> entries)
-    {
-        string log = eventName + "\n";
-        var entry = new Dictionary<string, object>();
-        entry["Event"] = eventName;
-        foreach (var kvp in entries)
+        positions.Add(new ApiClient.Position
         {
-            var serializableValue = ToSerializable(kvp.Value);
-            log += $"{kvp.Key}: {serializableValue}\n";
-            entry[kvp.Key] = serializableValue;
-        }
-        logEntries.Add(entry);
+            controller = controller,
+            timestamp = timestamp,
+            pos = new float[] { pos.x, pos.y, pos.z },
+            rot = new float[] { rot.x, rot.y, rot.z, rot.w }
+        });
     }
 
     private void Autosave()
@@ -78,9 +94,17 @@ public class LoggingManager : MonoBehaviour
             fileName += ".json";
 
         string fullPath = Path.Combine(folderPath, autosaveFileName);
-        string json = JsonConvert.SerializeObject(logEntries, Formatting.Indented);
+        var wrapper = new ApiClient.JsonWrapper
+        {
+            sessionId = sessionId,
+            positions = positions.ToArray()
+        };
+        string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log("Autosaved " + autosaveFileName + " to: " + folderPath);
+
+        var events = ToEventDataList();
+        _ = ApiGetExample.Instance.PostEvents(sessionId, events);
     }
 
     void OnApplicationQuit()
@@ -100,30 +124,13 @@ public class LoggingManager : MonoBehaviour
             count++;
         }
 
-        string json = JsonConvert.SerializeObject(logEntries, Formatting.Indented);
+        var wrapper = new ApiClient.JsonWrapper
+        {
+            sessionId = sessionId,
+            positions = positions.ToArray()
+        };
+        string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log(fileName + " written to: " + folderPath);
-    }
-
-    [System.Serializable]
-    private class SerializableEntry
-    {
-        public List<string> keys = new List<string>();
-        public List<string> values = new List<string>();
-
-        public SerializableEntry(Dictionary<string, object> dict)
-        {
-            foreach (var kvp in dict)
-            {
-                keys.Add(kvp.Key);
-                values.Add(kvp.Value != null ? kvp.Value.ToString() : "null");
-            }
-        }
-    }
-
-    [System.Serializable]
-    private class SerializableEntryList
-    {
-        public List<SerializableEntry> entries;
     }
 }
