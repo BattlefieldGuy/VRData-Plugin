@@ -14,9 +14,23 @@ namespace Devs.Jesper
 {
     public class ApiGetExample : MonoBehaviour
     {
-        public string baseUrl = "http://localhost:3000";
 
         public bool successfullyConnected { get; private set; } = false;
+        private const string BaseUrl = "http://localhost:3000";
+        public static ApiGetExample Instance;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         async void Start()
         {
@@ -161,11 +175,8 @@ namespace Devs.Jesper
         public string controller;
         public string eventType;
         public string timestamp; // ISO8601 string is easiest
-        // Optional (json convert can be null)
-
-        public string controllerPositions; // sends as JSON
-
-        public string details; // sends as JSON
+        public float[] controllerPositions; // could be Vector3, etc., adjust to match server
+        public EventDetails details;
     }
 
     [Serializable]
