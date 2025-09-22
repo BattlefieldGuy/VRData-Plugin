@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Devs.Jesper;
@@ -7,12 +8,15 @@ using UnityEngine;
 public class LoggingManager : MonoBehaviour
 {
     public static LoggingManager Instance;
-    private List<ApiClient.Position> positions = new List<ApiClient.Position>();
+
+    // Internal buffer of logged events
+    private readonly List<EventData> eventsBuffer = new List<EventData>();
+
     public string folderPath;
     public string fileName;
     public float autosaveFrequency = 10f;
     public string autosaveFileName = "autosave_logData.json";
-    public int sessionId = 1; // Set or generate as needed
+    public int sessionId = 1; // Set dynamically if needed
 
     private void Awake()
     {
@@ -26,38 +30,7 @@ public class LoggingManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
-    public List<EventData> ToEventDataList()
-    {
-        var list = new List<EventData>();
-        foreach (var pos in positions)
-        {
-            bool isPosition = pos.pos != null && pos.rot != null && pos.pos.Length == 3 && pos.rot.Length == 4;
-            list.Add(new EventData
-            {
-                controller = pos.controller,
-                eventType = isPosition ? "position" : "event",
-                timestamp = pos.timestamp,
-                controllerPositions = isPosition ? pos.pos : null,
-                details = isPosition
-                    ? new EventDetails { rotation = pos.rot }
-                    : new EventDetails { button = "Pressed" } // Or set appropriately for button events
-            });
-        }
-        return list;
-    }
-    
-    public void AddGenericEntry(string controller, string timestamp, string state)
-    {
-        positions.Add(new ApiClient.Position
-        {
-            controller = controller,
-            timestamp = timestamp,
-            pos = new float[3], // or null if not applicable
-            rot = new float[4]  // or null if not applicable
-        });
-    }
-    
+
     private void Start()
     {
 #if UNITY_EDITOR
@@ -71,22 +44,40 @@ public class LoggingManager : MonoBehaviour
 
     private void Update()
     {
-        if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && positions.Count > 0)
+        if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && eventsBuffer.Count > 0)
         {
             Autosave();
         }
     }
 
+    // ---- API-friendly loggers ----
+
     public void AddEntry(string controller, string timestamp, Vector3 pos, Quaternion rot)
     {
-        positions.Add(new ApiClient.Position
+        eventsBuffer.Add(new EventData
         {
             controller = controller,
+            eventType = "position",
             timestamp = timestamp,
-            pos = new float[] { pos.x, pos.y, pos.z },
-            rot = new float[] { rot.x, rot.y, rot.z, rot.w }
+            details = new EventDetails
+            {
+                position = new float[] { pos.x, pos.y, pos.z },
+                rotation = new float[] { rot.x, rot.y, rot.z, rot.w }
+            }
         });
     }
+
+    public void AddGenericEntry(string controller, string eventType, string timestamp)
+    {
+        eventsBuffer.Add(new EventData
+        {
+            controller = controller,
+            eventType = eventType,
+            timestamp = timestamp,
+        });
+    }
+
+    // ---- Save + Send ----
 
     private void Autosave()
     {
@@ -94,20 +85,22 @@ public class LoggingManager : MonoBehaviour
             fileName += ".json";
 
         string fullPath = Path.Combine(folderPath, autosaveFileName);
-        var wrapper = new ApiClient.JsonWrapper
+
+        var wrapper = new BatchEventsRequest
         {
             sessionId = sessionId,
-            positions = positions.ToArray()
+            events = new List<EventData>(eventsBuffer)
         };
+
         string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log("Autosaved " + autosaveFileName + " to: " + folderPath);
 
-        var events = ToEventDataList();
-        _ = ApiGetExample.Instance.PostEvents(sessionId, events);
+        // Also push to API
+        _ = ApiGetExample.Instance.PostEvents(sessionId, wrapper.events);
     }
 
-    void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         if (!fileName.EndsWith(".json"))
             fileName += ".json";
@@ -124,11 +117,12 @@ public class LoggingManager : MonoBehaviour
             count++;
         }
 
-        var wrapper = new ApiClient.JsonWrapper
+        var wrapper = new BatchEventsRequest
         {
             sessionId = sessionId,
-            positions = positions.ToArray()
+            events = new List<EventData>(eventsBuffer)
         };
+
         string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log(fileName + " written to: " + folderPath);
