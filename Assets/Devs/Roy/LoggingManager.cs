@@ -66,9 +66,10 @@ public class LoggingManager : MonoBehaviour
         });
     }
 
-    public void AddGenericEntry(string controller, string eventType, string timestamp)
+    public void AddGenericEntry(string controller, string eventType, string timestamp, string value = null)
     {
         // tape fix
+        Debug.Log(controller.ToLower());
         Controller ctrl = controller.ToLower() switch
         {
             "left" => Controller.Left,
@@ -79,6 +80,7 @@ public class LoggingManager : MonoBehaviour
             controller = ctrl,
             eventType = eventType,
             timestamp = timestamp,
+            value = value
         });
     }
 

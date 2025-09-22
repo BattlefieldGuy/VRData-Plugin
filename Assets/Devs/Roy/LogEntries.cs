@@ -153,7 +153,7 @@ namespace Devs.Roy
             if ((Mathf.Abs(InputDataRecord.Instance.JoystickR.x) >= deadzone || Mathf.Abs(InputDataRecord.Instance.JoystickR.y) >= deadzone) && _joystickRLogTimer >= joyStickLogInterval)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Right Joystick",
+                    "Right",
                     "Joystick Moved",
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.JoystickR.ToString()

@@ -6,10 +6,7 @@ using UnityEditor;
 [CustomEditor(typeof(ApiGetExample))]
 public class DatabaseManagerEditor : Editor
 {
-    EventData eventData = new()
-    {
-        controllerPositions = new float[3] // initialize with 3 elements
-    };
+    EventData eventData = new EventData();
     bool awaiting = false;
 
     public override async void OnInspectorGUI()
@@ -48,11 +45,6 @@ public class DatabaseManagerEditor : Editor
             eventData.controller = (Controller)EditorGUILayout.EnumPopup("Controller", eventData.controller);
             eventData.eventType = EditorGUILayout.TextField("Event Type", eventData.eventType);
             // eventData.timestamp = EditorGUILayout.TextField("Timestamp", eventData.timestamp);
-            var x =
-                EditorGUILayout.FloatField("Controller X pos", eventData.controllerPositions[0]);
-            var y = EditorGUILayout.FloatField("Controller Y pos", eventData.controllerPositions[1]);
-            var z = EditorGUILayout.FloatField("Controller Z pos", eventData.controllerPositions[2]);
-            eventData.controllerPositions = new float[] { x, y, z };
             // add button to send the data to the database
             if (!awaiting)
                 if (GUILayout.Button("Send Event Data"))

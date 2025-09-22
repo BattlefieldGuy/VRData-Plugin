@@ -56,13 +56,13 @@ public class InputDataRecord : MonoBehaviour
 
     void Start()
     {
-        inputData = GetComponent<InputData>();
+        inputData = FindFirstObjectByType<InputData>();
     }
 
     void Update()
     {
         //LeftSide
-        inputData.LeftController.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 positionL);
+        inputData.LeftController.TryGetFeatureValue(CommonUsages.devicePosition, out PositionL);
 
         inputData.LeftController.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationL);
 

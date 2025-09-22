@@ -48,7 +48,6 @@ namespace Devs.Jesper
                     controller = Controller.Left,
                     eventType = "trigger_press",
                     timestamp = DateTime.UtcNow.ToString("o"), // ISO8601
-                    controllerPositions = new float[] { 0, 1, 2 },
                     details = new EventDetails { button = "trigger"}
                 },
                 new EventData
@@ -56,7 +55,6 @@ namespace Devs.Jesper
                     controller = Controller.Right,
                     eventType = "grip_press",
                     timestamp = DateTime.UtcNow.ToString("o"),
-                    controllerPositions = new float[] { 3, 4, 5 },
                     details = new EventDetails { button = "grip" }
                 },
                 new EventData
@@ -164,7 +162,7 @@ namespace Devs.Jesper
         public Controller controller;
         public string eventType;
         public string timestamp; // ISO8601 string is easiest
-        public float[] controllerPositions; // could be Vector3, etc., adjust to match server
+        public string value; // optional value field
         public EventDetails details;
     }
 
