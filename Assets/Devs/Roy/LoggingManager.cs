@@ -51,7 +51,7 @@ public class LoggingManager : MonoBehaviour
 
     // ---- API-friendly loggers ----
 
-    public void AddEntry(string controller, string timestamp, Vector3 pos, Quaternion rot)
+    public void AddEntry(Controller controller, string timestamp, Vector3 pos, Quaternion rot)
     {
         eventsBuffer.Add(new EventData
         {
@@ -68,9 +68,15 @@ public class LoggingManager : MonoBehaviour
 
     public void AddGenericEntry(string controller, string eventType, string timestamp)
     {
+        // tape fix
+        Controller ctrl = controller.ToLower() switch
+        {
+            "left" => Controller.Left,
+            "right" => Controller.Right,
+        };
         eventsBuffer.Add(new EventData
         {
-            controller = controller,
+            controller = ctrl,
             eventType = eventType,
             timestamp = timestamp,
         });

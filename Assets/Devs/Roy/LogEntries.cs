@@ -1,4 +1,5 @@
 using System;
+using Devs.Jesper;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -41,13 +42,13 @@ namespace Devs.Roy
             if (_timer >= logInterval)
             {
                 LoggingManager.Instance.AddEntry(
-                    "Left",
+                    Controller.Left,
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.PositionL,
                     InputDataRecord.Instance.RotationL
                 );
                 LoggingManager.Instance.AddEntry(
-                    "Right",
+                    Controller.Right,
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.PositionR,
                     InputDataRecord.Instance.RotationR

@@ -166,10 +166,6 @@ namespace Devs.Jesper
         public string timestamp; // ISO8601 string is easiest
         public float[] controllerPositions; // could be Vector3, etc., adjust to match server
         public EventDetails details;
-        public string controller;             // maps to DB: controller
-        public string eventType;              // maps to DB: event_type
-        public string timestamp;              // maps to DB: timestamp
-        public EventDetails details;          // maps to DB: details
     }
 
     [Serializable]
