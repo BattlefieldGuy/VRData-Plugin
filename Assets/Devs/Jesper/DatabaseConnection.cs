@@ -138,13 +138,6 @@ namespace Devs.Jesper
     }
 
 
-    [Serializable]
-    public class EventDetails
-    {
-        public float[] position;
-        public float[] rotation;
-        public string button;
-    }
 
     [Serializable]
     public class ControllerEvent
@@ -173,6 +166,18 @@ namespace Devs.Jesper
         public string timestamp; // ISO8601 string is easiest
         public float[] controllerPositions; // could be Vector3, etc., adjust to match server
         public EventDetails details;
+        public string controller;             // maps to DB: controller
+        public string eventType;              // maps to DB: event_type
+        public string timestamp;              // maps to DB: timestamp
+        public EventDetails details;          // maps to DB: details
+    }
+
+    [Serializable]
+    public class EventDetails
+    {
+        public float[] position;  // goes inside details
+        public float[] rotation;  // goes inside details
+        public string button;     // goes inside details
     }
 
     [Serializable]

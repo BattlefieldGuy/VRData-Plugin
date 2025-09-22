@@ -41,13 +41,13 @@ namespace Devs.Roy
             if (_timer >= logInterval)
             {
                 LoggingManager.Instance.AddEntry(
-                    "Left Controller",
+                    "Left",
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.PositionL,
                     InputDataRecord.Instance.RotationL
                 );
                 LoggingManager.Instance.AddEntry(
-                    "Right Controller",
+                    "Right",
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.PositionR,
                     InputDataRecord.Instance.RotationR
@@ -61,17 +61,17 @@ namespace Devs.Roy
             if (gripLPressed && !_prevGripL)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Left Grip",
+                    "Left",
                     DateTime.Now.ToString("o"),
-                    "Pressed"
+                    "Grip Pressed"
                 );
             }
             else if (!gripLPressed && _prevGripL)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Left Grip",
+                    "Left",
                     DateTime.Now.ToString("o"),
-                    "Released"
+                    "Grip Released"
                 );
             }
             _prevGripL = gripLPressed;
@@ -81,17 +81,17 @@ namespace Devs.Roy
             if (gripRPressed && !_prevGripR)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Right Grip",
+                    "Right",
                     DateTime.Now.ToString("o"),
-                    "Pressed"
+                    "Grip Pressed"
                 );
             }
             else if (!gripRPressed && _prevGripR)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Right Grip",
+                    "Right",
                     DateTime.Now.ToString("o"),
-                    "Released"
+                    "Grip Released"
                 );
             }
             _prevGripR = gripRPressed;
@@ -101,17 +101,17 @@ namespace Devs.Roy
             if (triggerLPressed && !_prevTriggerL)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Left Trigger",
+                    "Left",
                     DateTime.Now.ToString("o"),
-                    "Pressed"
+                    "Trigger Pressed"
                 );
             }
             else if (!triggerLPressed && _prevTriggerL)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Left Trigger",
+                    "Left",
                     DateTime.Now.ToString("o"),
-                    "Released"
+                    "Trigger Released"
                 );
             }
             _prevTriggerL = triggerLPressed;
@@ -121,17 +121,17 @@ namespace Devs.Roy
             if (triggerRPressed && !_prevTriggerR)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Right Trigger",
+                    "Right",
                     DateTime.Now.ToString("o"),
-                    "Pressed"
+                    "Trigger Pressed"
                 );
             }
             else if (!triggerRPressed && _prevTriggerR)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Right Trigger",
+                    "Right",
                     DateTime.Now.ToString("o"),
-                    "Released"
+                    "Trigger Released"
                 );
             }
             _prevTriggerR = triggerRPressed;
@@ -140,7 +140,8 @@ namespace Devs.Roy
             if ((Mathf.Abs(InputDataRecord.Instance.JoystickL.x) >= deadzone || Mathf.Abs(InputDataRecord.Instance.JoystickL.y) >= deadzone) && _joystickLLogTimer >= joyStickLogInterval)
             {
                 LoggingManager.Instance.AddGenericEntry(
-                    "Left Joystick",
+                    "Left",
+                    "Joystick Moved",
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.JoystickL.ToString()
                 );
@@ -152,6 +153,7 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Right Joystick",
+                    "Joystick Moved",
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.JoystickR.ToString()
                 );
@@ -164,8 +166,8 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Y Button",
-                    DateTime.Now.ToString("o"),
-                    "Pressed"
+                    "Pressed",
+                    DateTime.Now.ToString("o")
                 );
             }
             else if (!yPressed && _prevY)

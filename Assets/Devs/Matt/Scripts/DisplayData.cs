@@ -26,7 +26,7 @@ public class DisplayData : MonoBehaviour
 
     void Start()
     {
-        record = GetComponent<InputDataRecord>();
+        record = FindFirstObjectByType<InputDataRecord>();
     }
 
     void Update()

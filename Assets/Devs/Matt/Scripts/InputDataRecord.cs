@@ -5,6 +5,7 @@ public class InputDataRecord : MonoBehaviour
 {
     public static InputDataRecord Instance;
 
+    [Space(10)]
     [Header("LeftSide")]
     public Vector3 PositionL;
     public Quaternion RotationL;
@@ -14,7 +15,9 @@ public class InputDataRecord : MonoBehaviour
     public bool Ybutton;
     public bool Xbutton;
 
+    [Space(10)]
     [Header("RightSide")]
+    [Space(5)]
     public Vector3 PositionR;
     public Quaternion RotationR;
     public float GripR;
@@ -23,9 +26,16 @@ public class InputDataRecord : MonoBehaviour
     public bool Bbutton;
     public bool Abutton;
 
+    [Space(10)]
     [Header("Head")]
+    [Space(5)]
     public Vector3 PositionH;
     public Quaternion RotationH;
+
+    [Space(10)]
+    [Header("Body")]
+    [Space(5)]
+    public Vector3 PositionB;
 
 
     private InputData inputData;
@@ -85,6 +95,9 @@ public class InputDataRecord : MonoBehaviour
         inputData.HMD.TryGetFeatureValue(CommonUsages.devicePosition, out PositionH);
 
         inputData.HMD.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationH);
+
+        //body
+        PositionB = this.transform.position;
 
     }
 }
