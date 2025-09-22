@@ -6,11 +6,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using UnityEngine.Serialization;
 
 namespace Devs.Jesper
 {
     public class ApiGetExample : MonoBehaviour
     {
+
+        public bool successfullyConnected { get; private set; } = false;
         private const string BaseUrl = "http://localhost:3000";
         public static ApiGetExample Instance;
 
@@ -32,13 +37,47 @@ namespace Devs.Jesper
             // StartCoroutine(GetSession(1)); // fetch session with ID = 1
             // Fetch session
             var api = this;
+            return; // TESTING
+            // successfullyConnected = await api.TestConnection();
+            // if (!successfullyConnected)
+            //     return;
             string sessionData = await api.FetchSession(1);
             Debug.Log("Session Data: " + sessionData);
+
+            // Send some events
+            var events = new List<EventData>
+            {
+                new EventData
+                {
+                    controller = "left",
+                    eventType = "trigger_press",
+                    timestamp = DateTime.UtcNow.ToString("o"), // ISO8601
+                    controllerPositions = new { x = 0, y = 1, z = 2 }.ToString(),
+                    details = new { button = "trigger" }.ToString()
+                },
+                new EventData
+                {
+                    controller = "right",
+                    eventType = "grip_press",
+                    timestamp = DateTime.UtcNow.ToString("o"),
+                    controllerPositions = new { x = 3, y = 4, z = 5 }.ToString(),
+                    details = new { button = "grip" }.ToString()
+                },
+                new EventData
+                {
+                    controller = "left",
+                    eventType = "grip_release",
+                    timestamp = DateTime.UtcNow.ToString("o")
+                }
+            };
+
+            bool success = await api.PostEvents(1, events);
+            Debug.Log("Posted events: " + success);
         }
 
         public async Task<string> FetchSession(int sessionId)
         {
-            string url = $"{BaseUrl}/sessions/{sessionId}";
+            string url = $"{baseUrl}/sessions/{sessionId}";
             using (UnityWebRequest req = UnityWebRequest.Get(url))
             {
                 await req.SendWebRequest();
@@ -59,32 +98,48 @@ namespace Devs.Jesper
             BatchEventsRequest body = new BatchEventsRequest
             {
                 sessionId = sessionId,
-                events = events
+                events = events,
             };
 
             string json = JsonUtility.ToJson(body);
+            string json2 = JsonConvert.SerializeObject(body,
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            using (UnityWebRequest req = new UnityWebRequest($"{BaseUrl}/events", "POST"))
+            using UnityWebRequest req = new UnityWebRequest($"{baseUrl}/events", "POST");
+            byte[] jsonToSend = new UTF8Encoding().GetBytes(json2);
+            req.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            req.downloadHandler = new DownloadHandlerBuffer();
+            req.SetRequestHeader("Content-Type", "application/json");
+
+            await req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
             {
-                byte[] jsonToSend = new UTF8Encoding().GetBytes(json);
-                req.uploadHandler = new UploadHandlerRaw(jsonToSend);
-                req.downloadHandler = new DownloadHandlerBuffer();
-                req.SetRequestHeader("Content-Type", "application/json");
+                Debug.LogError($"Error posting events: {req.error}");
+                return false;
+            }
 
+            Debug.Log($"PostEvents response: {req.downloadHandler.text}");
+            return true;
+        }
+
+        public async Task TestConnection()
+        {
+            string url = $"{baseUrl}/ping";
+            using (UnityWebRequest req = UnityWebRequest.Get(url))
+            {
                 await req.SendWebRequest();
 
                 if (req.result != UnityWebRequest.Result.Success)
                 {
-                    Debug.LogError($"Error posting events: {req.error}");
-                    return false;
+                    Debug.LogError($"Error testing connection: {req.error}");
+                    return;
                 }
 
-                Debug.Log($"PostEvents response: {req.downloadHandler.text}");
-                return true;
+                successfullyConnected = true;
             }
         }
     }
-}
 
 
     [Serializable]
@@ -112,9 +167,11 @@ namespace Devs.Jesper
         public int sessionId;
         public ControllerEvent[] events;
     }
+
     [Serializable]
     public class EventData
     {
+        // Required
         public string controller;
         public string eventType;
         public string timestamp; // ISO8601 string is easiest
@@ -128,3 +185,4 @@ namespace Devs.Jesper
         public int sessionId;
         public List<EventData> events;
     }
+}
