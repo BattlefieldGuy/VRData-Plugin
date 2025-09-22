@@ -89,6 +89,7 @@ namespace Devs.Jesper
         // --- POST batch events ---
         public async Task<bool> PostEvents(int sessionId, List<EventData> events)
         {
+            
             BatchEventsRequest body = new BatchEventsRequest
             {
                 sessionId = sessionId,
@@ -98,6 +99,7 @@ namespace Devs.Jesper
             string json = JsonUtility.ToJson(body);
             string json2 = JsonConvert.SerializeObject(body,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            Debug.Log(json2);
 
             using UnityWebRequest req = new UnityWebRequest($"{baseUrl}/events", "POST");
             byte[] jsonToSend = new UTF8Encoding().GetBytes(json2);

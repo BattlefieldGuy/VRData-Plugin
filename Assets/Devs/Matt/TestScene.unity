@@ -417,7 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   folderPath: 
   fileName: 
-  autosaveFrequency: 10
+  autosaveFrequency: 2
   autosaveFileName: autosave_logData.json
   sessionId: 1
 --- !u!4 &1742478228
@@ -444,10 +444,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1742478225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613e6c69799a256498e292c79effaf73, type: 3}
+  m_Script: {fileID: 11500000, guid: ae5deb124afcf424aaf0e8d98053093c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiUrl: http://localhost:3000/Event
+  baseUrl: http://localhost:3000
 --- !u!1001 &1795101034
 PrefabInstance:
   m_ObjectHideFlags: 0
