@@ -1,22 +1,18 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
-using UnityEngine.Serialization;
 
 namespace Devs.Jesper
 {
     public class ApiGetExample : MonoBehaviour
     {
 
-        public bool successfullyConnected { get; private set; } = false;
-        private const string BaseUrl = "http://localhost:3000";
+        public string baseUrl = "http://localhost:3000";
+        public bool SuccessfullyConnected { get; private set; } = false;
         public static ApiGetExample Instance;
 
         private void Awake()
@@ -37,7 +33,7 @@ namespace Devs.Jesper
             // StartCoroutine(GetSession(1)); // fetch session with ID = 1
             // Fetch session
             var api = this;
-            return; // TESTING
+            // return; // TESTING
             // successfullyConnected = await api.TestConnection();
             // if (!successfullyConnected)
             //     return;
@@ -49,23 +45,23 @@ namespace Devs.Jesper
             {
                 new EventData
                 {
-                    controller = "left",
+                    controller = Controller.Left,
                     eventType = "trigger_press",
                     timestamp = DateTime.UtcNow.ToString("o"), // ISO8601
-                    controllerPositions = new { x = 0, y = 1, z = 2 }.ToString(),
-                    details = new { button = "trigger" }.ToString()
+                    controllerPositions = new float[] { 0, 1, 2 },
+                    details = new EventDetails { button = "trigger"}
                 },
                 new EventData
                 {
-                    controller = "right",
+                    controller = Controller.Right,
                     eventType = "grip_press",
                     timestamp = DateTime.UtcNow.ToString("o"),
-                    controllerPositions = new { x = 3, y = 4, z = 5 }.ToString(),
-                    details = new { button = "grip" }.ToString()
+                    controllerPositions = new float[] { 3, 4, 5 },
+                    details = new EventDetails { button = "grip" }
                 },
                 new EventData
                 {
-                    controller = "left",
+                    controller = Controller.Left,
                     eventType = "grip_release",
                     timestamp = DateTime.UtcNow.ToString("o")
                 }
@@ -136,7 +132,7 @@ namespace Devs.Jesper
                     return;
                 }
 
-                successfullyConnected = true;
+                SuccessfullyConnected = true;
             }
         }
     }
@@ -172,7 +168,7 @@ namespace Devs.Jesper
     public class EventData
     {
         // Required
-        public string controller;
+        public Controller controller;
         public string eventType;
         public string timestamp; // ISO8601 string is easiest
         public float[] controllerPositions; // could be Vector3, etc., adjust to match server
@@ -184,5 +180,10 @@ namespace Devs.Jesper
     {
         public int sessionId;
         public List<EventData> events;
+    }
+    public enum Controller
+    {
+        Left,
+        Right
     }
 }

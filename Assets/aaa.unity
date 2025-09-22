@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae5deb124afcf424aaf0e8d98053093c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUrl: http://localhost:30005
+  baseUrl: http://localhost:3000
 --- !u!1 &1358195246
 GameObject:
   m_ObjectHideFlags: 0

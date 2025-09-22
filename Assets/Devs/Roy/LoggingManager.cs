@@ -47,7 +47,7 @@ public class LoggingManager : MonoBehaviour
         return list;
     }
     
-    public void AddGenericEntry(string controller, string timestamp, string state)
+    public void AddGenericEntry(Controller controller, string timestamp, string state)
     {
         positions.Add(new ApiClient.Position
         {
@@ -77,7 +77,7 @@ public class LoggingManager : MonoBehaviour
         }
     }
 
-    public void AddEntry(string controller, string timestamp, Vector3 pos, Quaternion rot)
+    public void AddEntry(Controller controller, string timestamp, Vector3 pos, Quaternion rot)
     {
         positions.Add(new ApiClient.Position
         {

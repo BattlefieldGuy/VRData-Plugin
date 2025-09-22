@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.IO;
+using Devs.Jesper;
 
 public class ApiClient : MonoBehaviour
 {
@@ -68,7 +69,7 @@ public class ApiClient : MonoBehaviour
     [System.Serializable]
     public class Position
     {
-        public string controller;
+        public Controller controller;
         public string timestamp;
         public float[] pos;
         public float[] rot;
