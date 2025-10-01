@@ -52,7 +52,7 @@ public class DatabaseManagerEditor : Editor
         if (dbManager.SuccessfullyConnected)
         {
             // Add option to login, logout and create a new session.
-            if(!isLoggedIn)
+            // if(!isLoggedIn)
                 
         }
     }
