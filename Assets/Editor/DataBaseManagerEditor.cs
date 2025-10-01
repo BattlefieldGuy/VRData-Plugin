@@ -1,21 +1,32 @@
-using System.Collections.Generic;
+#if UNITY_EDITOR
 using Devs.Jesper;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(ApiGetExample))]
+[CustomEditor(typeof(DatabaseConnection))]
 public class DatabaseManagerEditor : Editor
 {
-    EventData eventData = new EventData();
-    bool awaiting = false;
+    // EventData eventData = new EventData();
+    private bool _awaiting = false;
+    // public string baseUrl = "http://localhost:3000";
 
     public override async void OnInspectorGUI()
     {
-        DrawDefaultInspector(); // Draws the normal inspector
+        // DrawDefaultInspector(); // Draws the normal inspector
+        DatabaseConnection dbManager = (DatabaseConnection)target;
+        // check if in play mode
+        if (!Application.isPlaying)
+        {
+            dbManager.baseUrl = EditorGUILayout.TextField("Base URL", dbManager.baseUrl);
+            // dbManager.apiKey = EditorGUILayout.TextField("API Key", dbManager.apiKey);
+            return;
+        }
 
-        ApiGetExample dbManager = (ApiGetExample)target;
-        
-        // add a unclickable checkmark to show if connected or not
+        EditorGUILayout.HelpBox("Database connection settings cannot be changed in Play mode.", MessageType.Warning);
+        return;
+
+
+        // add an unclickable checkmark to show if connected or not
 
 
         if (dbManager.SuccessfullyConnected)
@@ -29,7 +40,7 @@ public class DatabaseManagerEditor : Editor
             GUI.enabled = true;
         }
 
-        if (GUILayout.Button("Connect to Database"))
+        if (GUILayout.Button("Connect to Database") )
         {
             GUI.enabled = false;
             await dbManager.TestConnection();
@@ -40,21 +51,9 @@ public class DatabaseManagerEditor : Editor
         // if connected, show a new ui to add dummy data
         if (dbManager.SuccessfullyConnected)
         {
-            EditorGUILayout.LabelField("Add dummy data", EditorStyles.boldLabel);
-            // shows user the a list of the EventData class to fill in
-            eventData.controller = (Controller)EditorGUILayout.EnumPopup("Controller", eventData.controller);
-            eventData.eventType = EditorGUILayout.TextField("Event Type", eventData.eventType);
-            // eventData.timestamp = EditorGUILayout.TextField("Timestamp", eventData.timestamp);
-            // add button to send the data to the database
-            if (!awaiting)
-                if (GUILayout.Button("Send Event Data"))
-                {
-                    awaiting = true;
-                    eventData.timestamp = System.DateTime.UtcNow.ToString("o");
-                    await dbManager.PostEvents(90909090, new List<EventData> { eventData });
-                    awaiting = false;
-                }
+
         }
     }
     
 }
+#endif

@@ -16,6 +16,7 @@ public class LoggingManager : MonoBehaviour
     public string fileName;
     public float autosaveFrequency = 10f;
     public string autosaveFileName = "autosave_logData.json";
+    public string tempStorageFileName = "temp_logData.json";
     public int sessionId = 1; // Set dynamically if needed
 
     private void Awake()
@@ -30,6 +31,7 @@ public class LoggingManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void Start()
     {
 #if UNITY_EDITOR
@@ -98,13 +100,34 @@ public class LoggingManager : MonoBehaviour
             sessionId = sessionId,
             events = new List<EventData>(eventsBuffer)
         };
+        var wrapperCopy =new BatchEventsRequest()
+        {
+            sessionId = sessionId,
+            events = new List<EventData>(eventsBuffer)
+        };;
+        // get the old json from the temp file if it exists
+        if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
+        {
+            string oldJson = File.ReadAllText(fullPath);
+            var oldWrapper = JsonConvert.DeserializeObject<BatchEventsRequest>(oldJson);
+            if (oldWrapper != null && oldWrapper.events != null)
+            {
+                wrapper.events.InsertRange(0, oldWrapper.events);
+            }
+        }
 
-        string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
+        
+
+        string json = JsonConvert.SerializeObject(wrapper, Formatting.None);
+        // overwrite the temp file with the current buffer
+        File.WriteAllText(Path.Combine(folderPath, tempStorageFileName), json);
         File.WriteAllText(fullPath, json);
         Debug.Log("Autosaved " + autosaveFileName + " to: " + folderPath);
 
         // Also push to API
-        _ = ApiGetExample.Instance.PostEvents(sessionId, wrapper.events);
+        _ = DatabaseConnection.Instance.PostEvents(sessionId,
+            wrapperCopy.events); // should not have the old events as they are already on the server
+        eventsBuffer.Clear();
     }
 
     private void OnApplicationQuit()
@@ -133,5 +156,8 @@ public class LoggingManager : MonoBehaviour
         string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
         File.WriteAllText(fullPath, json);
         Debug.Log(fileName + " written to: " + folderPath);
+        // delete the temp file
+        if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
+            File.Delete(Path.Combine(folderPath, tempStorageFileName));
     }
 }

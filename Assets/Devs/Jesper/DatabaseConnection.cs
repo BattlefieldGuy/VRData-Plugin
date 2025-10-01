@@ -8,12 +8,11 @@ using Newtonsoft.Json;
 
 namespace Devs.Jesper
 {
-    public class ApiGetExample : MonoBehaviour
+    public class DatabaseConnection : MonoBehaviour
     {
-
         public string baseUrl = "http://localhost:3000";
         public bool SuccessfullyConnected { get; private set; } = false;
-        public static ApiGetExample Instance;
+        public static DatabaseConnection Instance;
 
         private void Awake()
         {
@@ -28,57 +27,67 @@ namespace Devs.Jesper
             }
         }
 
-        async void Start()
+        private async void Start()
         {
-            // StartCoroutine(GetSession(1)); // fetch session with ID = 1
-            // Fetch session
-            var api = this;
-            // return; // TESTING
-            // successfullyConnected = await api.TestConnection();
-            // if (!successfullyConnected)
-            //     return;
-            string sessionData = await api.FetchSession(1);
-            Debug.Log("Session Data: " + sessionData);
-
-            // Send some events
-            var events = new List<EventData>
+            if (!SuccessfullyConnected)
             {
-                new EventData
-                {
-                    controller = Controller.Left,
-                    eventType = "trigger_press",
-                    timestamp = DateTime.UtcNow.ToString("o"), // ISO8601
-                    details = new EventDetails { button = "trigger"}
-                },
-                new EventData
-                {
-                    controller = Controller.Right,
-                    eventType = "grip_press",
-                    timestamp = DateTime.UtcNow.ToString("o"),
-                    details = new EventDetails { button = "grip" }
-                },
-                new EventData
-                {
-                    controller = Controller.Left,
-                    eventType = "grip_release",
-                    timestamp = DateTime.UtcNow.ToString("o")
-                }
-            };
+                Debug.LogWarning("Not connected to the database! Please check the inspector settings. Data will not be logged. Disabling script...");
+                enabled = false;
+                return;
+            }
+            // await TestConnection();
+            // if (SuccessfullyConnected)
+            // {
+            //     Debug.Log("Successfully connected to the database.");
+            // }
+            // else
+            // {
+            //     Debug.LogError("Failed to connect to the database.");
+            // }
+            // create a new session
+            var newSessionid = await CreateSession();
+            if (newSessionid != null)
+                LoggingManager.Instance.sessionId = (int)newSessionid;
+            else
+                Debug.LogError("Failed to create a new session.");
+        }
+        
+        private async Task<int?> CreateSession()
+        {
+            if (!enabled)
+                return null;
+            string url = $"{baseUrl}/sessions";
+            using UnityWebRequest req = new UnityWebRequest(url, "POST");
 
-            bool success = await api.PostEvents(1, events);
-            Debug.Log("Posted events: " + success);
+            // req.uploadHandler = new UploadHandlerRaw();
+            req.downloadHandler = new DownloadHandlerBuffer();
+            
+            
+            await req.SendWebRequest();
+
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Error creating session: {req.downloadHandler.text}");
+                return null;
+            }
+
+            var response = JsonConvert.DeserializeObject<NewSessionRequestResponse>(req.downloadHandler.text);
+            return response.sessionId;
         }
 
         public async Task<string> FetchSession(int sessionId)
         {
+            if(!enabled)
+                return null;
             string url = $"{baseUrl}/sessions/{sessionId}";
             using (UnityWebRequest req = UnityWebRequest.Get(url))
             {
+                
                 await req.SendWebRequest();
 
                 if (req.result != UnityWebRequest.Result.Success)
                 {
-                    Debug.LogError($"Error fetching session: {req.error}");
+                    Debug.LogError($"Error fetching session: {req.downloadHandler.text}");
                     return null;
                 }
 
@@ -89,19 +98,19 @@ namespace Devs.Jesper
         // --- POST batch events ---
         public async Task<bool> PostEvents(int sessionId, List<EventData> events)
         {
-            
-            BatchEventsRequest body = new BatchEventsRequest
+            if (!enabled)
+                return false;
+            var body = new BatchEventsRequest
             {
                 sessionId = sessionId,
                 events = events,
             };
 
-            string json = JsonUtility.ToJson(body);
             string json2 = JsonConvert.SerializeObject(body,
                 new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            Debug.Log(json2);
 
             using UnityWebRequest req = new UnityWebRequest($"{baseUrl}/events", "POST");
+            
             byte[] jsonToSend = new UTF8Encoding().GetBytes(json2);
             req.uploadHandler = new UploadHandlerRaw(jsonToSend);
             req.downloadHandler = new DownloadHandlerBuffer();
@@ -111,7 +120,7 @@ namespace Devs.Jesper
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"Error posting events: {req.error}");
+                Debug.LogError($"Error posting events: {req.downloadHandler.text}");
                 return false;
             }
 
@@ -121,6 +130,8 @@ namespace Devs.Jesper
 
         public async Task TestConnection()
         {
+            if (!enabled)
+                return;
             string url = $"{baseUrl}/ping";
             using (UnityWebRequest req = UnityWebRequest.Get(url))
             {
@@ -136,7 +147,6 @@ namespace Devs.Jesper
             }
         }
     }
-
 
 
     [Serializable]
@@ -158,6 +168,13 @@ namespace Devs.Jesper
     }
 
     [Serializable]
+    public class NewSessionRequestResponse
+    {
+        public bool success;
+        public int sessionId;
+    }
+
+    [Serializable]
     public class EventData
     {
         // Required
@@ -171,9 +188,9 @@ namespace Devs.Jesper
     [Serializable]
     public class EventDetails
     {
-        public float[] position;  // goes inside details
-        public float[] rotation;  // goes inside details
-        public string button;     // goes inside details
+        public float[] position; // goes inside details
+        public float[] rotation; // goes inside details
+        public string button; // goes inside details
     }
 
     [Serializable]
@@ -182,6 +199,7 @@ namespace Devs.Jesper
         public int sessionId;
         public List<EventData> events;
     }
+
     public enum Controller
     {
         Left,
