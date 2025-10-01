@@ -8,6 +8,7 @@ public class DatabaseManagerEditor : Editor
 {
     // EventData eventData = new EventData();
     private bool _awaiting = false;
+    private bool isLoggedIn = false;
     // public string baseUrl = "http://localhost:3000";
 
     public override async void OnInspectorGUI()
@@ -15,18 +16,17 @@ public class DatabaseManagerEditor : Editor
         // DrawDefaultInspector(); // Draws the normal inspector
         DatabaseConnection dbManager = (DatabaseConnection)target;
         // check if in play mode
-        if (!Application.isPlaying)
+        if (Application.isPlaying)
         {
-            dbManager.baseUrl = EditorGUILayout.TextField("Base URL", dbManager.baseUrl);
-            // dbManager.apiKey = EditorGUILayout.TextField("API Key", dbManager.apiKey);
+            EditorGUILayout.HelpBox("Database connection settings cannot be changed in Play mode.", MessageType.Warning);
             return;
         }
+        dbManager.baseUrl = EditorGUILayout.TextField("Base URL", dbManager.baseUrl);
+        // dbManager.apiKey = EditorGUILayout.TextField("API Key", dbManager.apiKey);
+        
+        
 
-        EditorGUILayout.HelpBox("Database connection settings cannot be changed in Play mode.", MessageType.Warning);
-        return;
-
-
-        // add an unclickable checkmark to show if connected or not
+        
 
 
         if (dbManager.SuccessfullyConnected)
@@ -51,9 +51,12 @@ public class DatabaseManagerEditor : Editor
         // if connected, show a new ui to add dummy data
         if (dbManager.SuccessfullyConnected)
         {
-
+            // Add option to login, logout and create a new session.
+            if(!isLoggedIn)
+                
         }
     }
+    
     
 }
 #endif
