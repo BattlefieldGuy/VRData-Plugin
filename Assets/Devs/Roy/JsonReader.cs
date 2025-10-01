@@ -1,8 +1,7 @@
-using System;
 using Devs.Jesper;
-using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine;
 
 namespace Devs.Roy
 {
@@ -22,10 +21,6 @@ namespace Devs.Roy
             {
                 Destroy(gameObject);
             }
-        }
-
-        private void Start()
-        {
             string filePath = Path.Combine(LoggingManager.Instance.folderPath, LoggingManager.Instance.replayFileName);
             if (File.Exists(filePath))
             {
@@ -39,6 +34,7 @@ namespace Devs.Roy
                 Debug.LogError("File not found: " + filePath);
             }
         }
+
 
         public SessionResponse GetJsonSession()
         {

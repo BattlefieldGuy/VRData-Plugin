@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Devs.Jesper;
 using Devs.Roy;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using JsonReader = Devs.Roy.JsonReader;
 
@@ -33,7 +32,7 @@ public class LoggingManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
 #if UNITY_EDITOR
         folderPath = UnityEditor.EditorPrefs.GetString("Toolbar_FolderPath", Application.persistentDataPath);
         fileName = UnityEditor.EditorPrefs.GetString("Toolbar_FileName", "logData.json");
@@ -49,11 +48,11 @@ public class LoggingManager : MonoBehaviour
     {
         foreach (var evt in JsonReader.Instance.GetJsonSession().events)
         {
-            Debug.Log("Controller: " +evt.controller + 
-                      " EventType: " + evt.eventType + 
-                      " Timestamp: " + evt.timestamp + 
-                      " Position: " + evt.details.position[0]+ ","  + evt.details.position[1] + "," + evt.details.position[2] + 
-                      " Rotation: " + evt.details.rotation[0]+ ","  + evt.details.rotation[1] + "," + evt.details.rotation[2] + "," + evt.details.rotation[3]);
+            Debug.Log("Controller: " + evt.controller +
+                      " EventType: " + evt.eventType +
+                      " Timestamp: " + evt.timestamp +
+                      " Position: " + evt.details.position[0] + "," + evt.details.position[1] + "," + evt.details.position[2] +
+                      " Rotation: " + evt.details.rotation[0] + "," + evt.details.rotation[1] + "," + evt.details.rotation[2] + "," + evt.details.rotation[3]);
         }
     }
 
@@ -114,11 +113,11 @@ public class LoggingManager : MonoBehaviour
             sessionId = sessionId,
             events = new List<EventData>(eventsBuffer)
         };
-        var wrapperCopy =new BatchEventsRequest()
+        var wrapperCopy = new BatchEventsRequest()
         {
             sessionId = sessionId,
             events = new List<EventData>(eventsBuffer)
-        };;
+        }; ;
         // get the old json from the temp file if it exists
         if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
         {
@@ -130,7 +129,7 @@ public class LoggingManager : MonoBehaviour
             }
         }
 
-        
+
 
         string json = JsonConvert.SerializeObject(wrapper, Formatting.None);
         // overwrite the temp file with the current buffer
