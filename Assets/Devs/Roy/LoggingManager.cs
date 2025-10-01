@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Devs.Jesper;
+using Devs.Roy;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class LoggingManager : MonoBehaviour
 
     public string folderPath;
     public string fileName;
+    public string replayFileName;
     public float autosaveFrequency = 10f;
     public string autosaveFileName = "autosave_logData.json";
     public string tempStorageFileName = "temp_logData.json";
@@ -30,22 +32,22 @@ public class LoggingManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
+        
 #if UNITY_EDITOR
         folderPath = UnityEditor.EditorPrefs.GetString("Toolbar_FolderPath", Application.persistentDataPath);
         fileName = UnityEditor.EditorPrefs.GetString("Toolbar_FileName", "logData.json");
+        replayFileName = UnityEditor.EditorPrefs.GetString("Toolbar_ReplayFileName");
 #else
         folderPath = Application.persistentDataPath;
         fileName = "logData.json";
+        replayFileName = fileName;
 #endif
     }
+    
 
     private void Update()
     {
-        if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && eventsBuffer.Count > 0)
+        if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && eventsBuffer.Count > 0 && LogEntries.LogEnabled)
         {
             Autosave();
         }
@@ -132,32 +134,35 @@ public class LoggingManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        if (!fileName.EndsWith(".json"))
-            fileName += ".json";
-
-        string fullPath = Path.Combine(folderPath, fileName);
-        string baseName = Path.GetFileNameWithoutExtension(fileName);
-        string ext = Path.GetExtension(fileName);
-        int count = 1;
-
-        while (File.Exists(fullPath))
+        if (LogEntries.LogEnabled)
         {
-            string tempFileName = $"{baseName}({count}){ext}";
-            fullPath = Path.Combine(folderPath, tempFileName);
-            count++;
+            if (!fileName.EndsWith(".json"))
+                fileName += ".json";
+
+            string fullPath = Path.Combine(folderPath, fileName);
+            string baseName = Path.GetFileNameWithoutExtension(fileName);
+            string ext = Path.GetExtension(fileName);
+            int count = 1;
+
+            while (File.Exists(fullPath))
+            {
+                string tempFileName = $"{baseName}({count}){ext}";
+                fullPath = Path.Combine(folderPath, tempFileName);
+                count++;
+            }
+
+            var wrapper = new BatchEventsRequest
+            {
+                sessionId = sessionId,
+                events = new List<EventData>(eventsBuffer)
+            };
+
+            string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
+            File.WriteAllText(fullPath, json);
+            Debug.Log(fileName + " written to: " + folderPath);
+            // delete the temp file
+            if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
+                File.Delete(Path.Combine(folderPath, tempStorageFileName));
         }
-
-        var wrapper = new BatchEventsRequest
-        {
-            sessionId = sessionId,
-            events = new List<EventData>(eventsBuffer)
-        };
-
-        string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
-        File.WriteAllText(fullPath, json);
-        Debug.Log(fileName + " written to: " + folderPath);
-        // delete the temp file
-        if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
-            File.Delete(Path.Combine(folderPath, tempStorageFileName));
     }
 }

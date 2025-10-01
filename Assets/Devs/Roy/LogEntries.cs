@@ -9,6 +9,7 @@ namespace Devs.Roy
     {
         [Tooltip("Turns on/off logging")]
         public bool toggleLogging = true;
+        public static bool LogEnabled;
 
         [Tooltip("Times per second for logging Positions and Rotations")]
         public float logFrequency = 10f;
@@ -29,6 +30,11 @@ namespace Devs.Roy
         private float _joystickRLogTimer;
         private bool _prevGripL, _prevGripR, _prevTriggerL, _prevTriggerR;
         private bool _prevY, _prevX, _prevB, _prevA;
+
+        private void Awake()
+        {
+            LogEnabled = toggleLogging;
+        }
 
         private void Update()
         {
