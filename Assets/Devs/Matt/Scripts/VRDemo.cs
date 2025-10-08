@@ -17,8 +17,8 @@ public class VRDemo : MonoBehaviour
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject LeftController;
 
-    [Header("Replay Settings")]
-    public float playbackSpeed = 1f; // 1x = realtime, 2x = twice as fast
+    [Header("Replay Settings")] 
+    public float playbackSpeed = 1f;
     public bool autoStart = true;
     public bool loop = false;
 

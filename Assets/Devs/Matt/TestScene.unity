@@ -361,12 +361,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1131364189}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c25569e4f968a6d4199fce752ae4da1f, type: 3}
+  m_Script: {fileID: 11500000, guid: f3bdcff22a9173a46b478a63f593dc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VRHeadSet: {fileID: 919132148261269262}
-  RightController: {fileID: 8418461446574468301}
-  LeftController: {fileID: 3893302538680511301}
+  LeftController: {fileID: 4416934628898501119}
+  RightController: {fileID: 9196265474786342519}
+  playbackSpeed: 1
+  loop: 0
 --- !u!1 &1742478225
 GameObject:
   m_ObjectHideFlags: 0
