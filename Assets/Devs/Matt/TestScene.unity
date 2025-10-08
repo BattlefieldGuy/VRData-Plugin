@@ -364,8 +364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3bdcff22a9173a46b478a63f593dc91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftController: {fileID: 4416934628898501119}
-  RightController: {fileID: 9196265474786342519}
+  LeftController: {fileID: 0}
+  RightController: {fileID: 0}
   playbackSpeed: 1
   loop: 0
 --- !u!1 &1742478225

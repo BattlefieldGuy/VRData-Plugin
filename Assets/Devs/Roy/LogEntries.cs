@@ -69,16 +69,16 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Left",
-                    DateTime.Now.ToString("o"),
-                    "Grip Pressed"
+                    "Grip Pressed",
+                    DateTime.Now.ToString("o")
                 );
             }
             else if (!gripLPressed && _prevGripL)
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Left",
-                    DateTime.Now.ToString("o"),
-                    "Grip Released"
+                    "Grip Released",
+                    DateTime.Now.ToString("o")
                 );
             }
             _prevGripL = gripLPressed;
@@ -89,16 +89,16 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Right",
-                    DateTime.Now.ToString("o"),
-                    "Grip Pressed"
+                    "Grip Pressed",
+                    DateTime.Now.ToString("o")
                 );
             }
             else if (!gripRPressed && _prevGripR)
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Right",
-                    DateTime.Now.ToString("o"),
-                    "Grip Released"
+                    "Grip Released",
+                    DateTime.Now.ToString("o")
                 );
             }
             _prevGripR = gripRPressed;
@@ -109,16 +109,16 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Left",
-                    DateTime.Now.ToString("o"),
-                    "Trigger Pressed"
+                    "Trigger Pressed",
+                    DateTime.Now.ToString("o")
                 );
             }
             else if (!triggerLPressed && _prevTriggerL)
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Left",
-                    DateTime.Now.ToString("o"),
-                    "Trigger Released"
+                    "Trigger Released",
+                    DateTime.Now.ToString("o")
                 );
             }
             _prevTriggerL = triggerLPressed;
@@ -129,16 +129,16 @@ namespace Devs.Roy
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Right",
-                    DateTime.Now.ToString("o"),
-                    "Trigger Pressed"
+                    "Trigger Pressed",
+                    DateTime.Now.ToString("o")
                 );
             }
             else if (!triggerRPressed && _prevTriggerR)
             {
                 LoggingManager.Instance.AddGenericEntry(
                     "Right",
-                    DateTime.Now.ToString("o"),
-                    "Trigger Released"
+                    "Trigger Released",
+                    DateTime.Now.ToString("o")
                 );
             }
             _prevTriggerR = triggerRPressed;

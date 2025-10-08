@@ -37,7 +37,7 @@ public class ReplayPlayer : MonoBehaviour
 
     public void LoadSession()
     {
-        var session = JsonReader.Instance?.GetJsonSession();
+        var session = JsonReader.Instance.GetJsonSession();
         if (session == null || session.events == null || session.events.Length == 0)
         {
             Debug.LogWarning("ReplayPlayer: No session/events found.");
@@ -110,7 +110,7 @@ public class ReplayPlayer : MonoBehaviour
             CurrentTimeSeconds += dt;
             DateTime now = sessionStart.AddSeconds(CurrentTimeSeconds);
 
-            // process all events up to 'now'
+         
             while (nextEventIndex < events.Count && eventTimes[nextEventIndex] <= now)
             {
                 ApplyEvent(events[nextEventIndex]);
