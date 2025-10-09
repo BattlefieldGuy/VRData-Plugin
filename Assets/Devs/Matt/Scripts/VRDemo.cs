@@ -17,7 +17,7 @@ public class VRDemo : MonoBehaviour
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject LeftController;
 
-    [Header("Replay Settings")] 
+    [Header("Replay Settings")]
     public float playbackSpeed = 1f;
     public bool autoStart = true;
     public bool loop = false;
@@ -87,14 +87,14 @@ public class VRDemo : MonoBehaviour
             DateTime? prevTime = null;
             foreach (var evt in events)
             {
-                
+
                 while (isPaused)
                     yield return null;
 
-                
+
                 if (!DateTime.TryParse(evt.timestamp, null, DateTimeStyles.RoundtripKind, out var curTime))
                 {
-                    
+
                     ApplyEvent(evt);
                     yield return null;
                     continue;
@@ -109,7 +109,7 @@ public class VRDemo : MonoBehaviour
                         float elapsed = 0f;
                         while (elapsed < wait)
                         {
-                            
+
                             if (!isPaused)
                                 elapsed += Time.deltaTime;
                             yield return null;
@@ -130,17 +130,17 @@ public class VRDemo : MonoBehaviour
         if (evt == null || string.IsNullOrEmpty(evt.eventType))
             return;
 
-        
+
         if (!evt.eventType.Equals("position", StringComparison.OrdinalIgnoreCase))
             return;
 
-       
+
         bool targetIsLeft = false;
         bool targetIsRight = false;
 
         if (int.TryParse(evt.controller, out var numeric))
         {
-            
+
             targetIsLeft = numeric == 0;
             targetIsRight = numeric == 1;
         }
@@ -151,7 +151,7 @@ public class VRDemo : MonoBehaviour
             targetIsRight = c.Contains("right") || c == "r";
         }
 
-        
+
         if (evt.details != null)
         {
             var pos = evt.details.position;
@@ -160,18 +160,18 @@ public class VRDemo : MonoBehaviour
             {
                 var position = new Vector3(pos[0], pos[1], pos[2]);
                 if (targetIsLeft && LeftController != null)
-                    LeftController.transform.position = position;
+                    LeftController.transform.localPosition = position;
                 else if (targetIsRight && RightController != null)
-                    RightController.transform.position = position;
+                    RightController.transform.localPosition = position;
             }
 
             if (rot != null && rot.Length >= 4)
             {
                 var rotation = new Quaternion(rot[0], rot[1], rot[2], rot[3]);
                 if (targetIsLeft && LeftController != null)
-                    LeftController.transform.rotation = rotation;
+                    LeftController.transform.localRotation = rotation;
                 else if (targetIsRight && RightController != null)
-                    RightController.transform.rotation = rotation;
+                    RightController.transform.localRotation = rotation;
             }
         }
     }
