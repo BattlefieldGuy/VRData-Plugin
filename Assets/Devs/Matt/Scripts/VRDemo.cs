@@ -9,6 +9,7 @@ using JsonReader = Devs.Roy.JsonReader;
 
 public class VRDemo : MonoBehaviour
 {
+
     [Header("Head")]
     [SerializeField] private GameObject VRHeadSet;
 
@@ -24,6 +25,9 @@ public class VRDemo : MonoBehaviour
 
     private Coroutine replayCoroutine;
     private bool isPaused = false;
+
+    [Header("Extra's")]
+    [SerializeField] private GameObject parentTransform;
 
     void Start()
     {
@@ -160,7 +164,7 @@ public class VRDemo : MonoBehaviour
             {
                 var position = new Vector3(pos[0], pos[1], pos[2]);
                 if (targetIsLeft && LeftController != null)
-                    LeftController.transform.localPosition = position;
+                    LeftController.transform.localPosition = parentTransform.InverseTransformPoint(position);
                 else if (targetIsRight && RightController != null)
                     RightController.transform.localPosition = position;
             }
