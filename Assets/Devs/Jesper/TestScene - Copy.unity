@@ -367,6 +367,10 @@ MonoBehaviour:
   VRHeadSet: {fileID: 919132148261269262}
   RightController: {fileID: 8418461446574468301}
   LeftController: {fileID: 3893302538680511301}
+  playbackSpeed: 1
+  autoStart: 1
+  loop: 0
+  parentTransform: {fileID: 0}
 --- !u!1 &1742478225
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,6 +383,7 @@ GameObject:
   - component: {fileID: 1742478227}
   - component: {fileID: 1742478226}
   - component: {fileID: 1742478229}
+  - component: {fileID: 1742478230}
   m_Layer: 0
   m_Name: Data-Controller
   m_TagString: Untagged
@@ -417,8 +422,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   folderPath: 
   fileName: 
+  replayFileName: 
   autosaveFrequency: 2
   autosaveFileName: autosave_logData.json
+  tempStorageFileName: temp_logData.json
   sessionId: 1
 --- !u!4 &1742478228
 Transform:
@@ -448,6 +455,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseUrl: http://localhost:3000
+  userId: -1
+--- !u!114 &1742478230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742478225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084d34cc80b46008466863e2675f4cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseUrl: http://localhost:3000
+  connected: 1
+  userId: 2
+  sessionId: 1
 --- !u!1001 &1795101034
 PrefabInstance:
   m_ObjectHideFlags: 0

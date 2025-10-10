@@ -9,12 +9,15 @@ using Newtonsoft.Json;
 
 namespace Devs.Jesper
 {
+    [RequireComponent(typeof(DatabaseEditorConnection))]
     public class DatabaseConnection : MonoBehaviour
     {
         public string baseUrl = "http://localhost:3000";
-        public bool SuccessfullyConnected { get; private set; } = false;
+        // public bool SuccessfullyConnected { get; set; } = false;
+        [HideInInspector]
         public int userId = -1; // needs to be set via login
         public static DatabaseConnection Instance;
+        private DatabaseEditorConnection _dbe;
 
         private void Awake()
         {
@@ -27,75 +30,18 @@ namespace Devs.Jesper
             {
                 Destroy(gameObject);
             }
+            _dbe = GetComponent<DatabaseEditorConnection>();
         }
 
-        private async void Start()
+        private void Start()
         {
-            if (!SuccessfullyConnected || !LogEntries.LogEnabled)
+            if (!_dbe.SetupComplete || !LogEntries.LogEnabled)
             {
                 if (LogEntries.LogEnabled)
                     Debug.LogWarning(
-                        "Not connected to the database! Please check the inspector settings. Data will not be logged. Disabling script...");
+                        "<b> Not connected to the database! </b> Please check the inspector settings. Data will only be logged locally. Disabling script...");
                 enabled = false;
                 return;
-            }
-
-            // await TestConnection();
-            // if (SuccessfullyConnected)
-            // {
-            //     Debug.Log("Successfully connected to the database.");
-            // }
-            // else
-            // {
-            //     Debug.LogError("Failed to connect to the database.");
-            // }
-            // create a new session
-            var newSessionid = await CreateSession();
-            if (newSessionid != null)
-                LoggingManager.Instance.sessionId = (int)newSessionid;
-            else
-                Debug.LogError("Failed to create a new session.");
-        }
-
-        private async Task<int?> CreateSession()
-        {
-            if (!enabled)
-                return null;
-            string url = $"{baseUrl}/sessions";
-            using UnityWebRequest req = new UnityWebRequest(url, "POST");
-
-            // req.uploadHandler = new UploadHandlerRaw();
-            req.downloadHandler = new DownloadHandlerBuffer();
-
-
-            await req.SendWebRequest();
-
-            if (req.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Error creating session: {req.downloadHandler.text}");
-                return null;
-            }
-
-            var response = JsonConvert.DeserializeObject<NewSessionRequestResponse>(req.downloadHandler.text);
-            return response.sessionId;
-        }
-
-        public async Task<string> FetchSession(int sessionId)
-        {
-            if (!enabled)
-                return null;
-            string url = $"{baseUrl}/sessions/{sessionId}";
-            using (UnityWebRequest req = UnityWebRequest.Get(url))
-            {
-                await req.SendWebRequest();
-
-                if (req.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.LogError($"Error fetching session: {req.downloadHandler.text}");
-                    return null;
-                }
-
-                return req.downloadHandler.text;
             }
         }
 
@@ -131,50 +77,6 @@ namespace Devs.Jesper
             Debug.Log($"PostEvents response: {req.downloadHandler.text}");
             return true;
         }
-
-        public async Task TestConnection()
-        {
-            if (!enabled)
-                return;
-            string url = $"{baseUrl}/ping";
-            using UnityWebRequest req = UnityWebRequest.Get(url);
-            await req.SendWebRequest();
-
-            if (req.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Error testing connection: {req.error}");
-                return;
-            }
-
-            SuccessfullyConnected = true;
-        }
-        // public async Task<int> LoginUser()
-
-        public async Task RegisterUser(string username1, DateTime dateOfBirth)
-        {
-            string url = $"{baseUrl}/register";
-            using UnityWebRequest req = new UnityWebRequest(url, "POST");
-            var body = new
-            {
-                username = username1,
-                dateOfBirth = dateOfBirth.ToString("yyyy-MM-dd")
-            };
-            string json = JsonConvert.SerializeObject(body);
-            byte[] jsonToSend = new UTF8Encoding().GetBytes(json);
-            req.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            req.downloadHandler = new DownloadHandlerBuffer();
-
-            await req.SendWebRequest();
-            if (req.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError($"Error registering user: {req.downloadHandler.text}");
-                return;
-            }
-
-            Debug.Log($"User registered successfully: {req.downloadHandler.text}");
-            var response = JsonConvert.DeserializeObject<NewSessionRequestResponse>(req.downloadHandler.text);
-            userId = response.sessionId;
-        }
     }
 
 
@@ -194,13 +96,6 @@ namespace Devs.Jesper
     {
         public int sessionId;
         public ControllerEvent[] events;
-    }
-
-    [Serializable]
-    public class NewSessionRequestResponse
-    {
-        public bool success;
-        public int sessionId;
     }
 
     [Serializable]
