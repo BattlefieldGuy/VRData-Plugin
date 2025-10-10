@@ -161,13 +161,13 @@ public class VRDemo : MonoBehaviour
             var pos = evt.details.position;
             var rot = evt.details.rotation;
             if (pos != null && pos.Length >= 3)
-            {
-                var position = new Vector3(pos[0], pos[1], pos[2]);
-                if (targetIsLeft && LeftController != null)
-                    LeftController.transform.localPosition = parentTransform.InverseTransformPoint(position);
-                else if (targetIsRight && RightController != null)
-                    RightController.transform.localPosition = position;
-            }
+            // {
+            //     var position = new Vector3(pos[0], pos[1], pos[2]);
+            //     if (targetIsLeft && LeftController != null)
+            //         LeftController.transform.localPosition = parentTransform.InverseTransformPoint(position);
+            //     else if (targetIsRight && RightController != null)
+            //         RightController.transform.localPosition = position;
+            // }
 
             if (rot != null && rot.Length >= 4)
             {
