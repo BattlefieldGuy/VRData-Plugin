@@ -1,11 +1,11 @@
 // Language: csharp
+using Devs.Jesper;
+using Devs.Roy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Devs.Jesper;
-using Devs.Roy;
 using UnityEngine;
 
 public class ReplayPlayer : MonoBehaviour
@@ -110,7 +110,7 @@ public class ReplayPlayer : MonoBehaviour
             CurrentTimeSeconds += dt;
             DateTime now = sessionStart.AddSeconds(CurrentTimeSeconds);
 
-         
+
             while (nextEventIndex < events.Count && eventTimes[nextEventIndex] <= now)
             {
                 ApplyEvent(events[nextEventIndex]);
@@ -171,17 +171,17 @@ public class ReplayPlayer : MonoBehaviour
         bool targetIsLeft = IsLeftController(evt.controller);
         bool targetIsRight = !targetIsLeft;
 
-       
+
         if (evt.details.position != null && evt.details.position.Length >= 3)
         {
             var pos = new Vector3(evt.details.position[0], evt.details.position[1], evt.details.position[2]);
             if (targetIsLeft && LeftController != null)
-                LeftController.position = pos;
+                LeftController.localPosition = pos;
             else if (targetIsRight && RightController != null)
-                RightController.position = pos;
+                RightController.localPosition = pos;
         }
 
-        
+
         if (evt.details.rotation != null && evt.details.rotation.Length >= 4)
         {
             var rot = new Quaternion(evt.details.rotation[0], evt.details.rotation[1], evt.details.rotation[2], evt.details.rotation[3]);
@@ -190,5 +190,6 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsRight && RightController != null)
                 RightController.rotation = rot;
         }
+
     }
 }
