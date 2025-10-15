@@ -168,7 +168,7 @@ public class ReplayPlayer : MonoBehaviour
             return numeric == 0;
         return controllerValue.Equals("left", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Left.ToString(), StringComparison.OrdinalIgnoreCase);
     }
-    
+
     private bool IsRightController(string controllerValue)
     {
         if (int.TryParse(controllerValue, out var numeric))
@@ -204,7 +204,7 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsHead && HMD != null)
             {
                 Debug.Log("Set HMD position");
-                HMD.position = pos;
+                HMD.localPosition = pos;
                 Debug.Log("HMD position set");
             }
         }
@@ -218,7 +218,7 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsRight && RightController != null)
                 RightController.localRotation = rot;
             else if (targetIsHead && HMD != null)
-                HMD.rotation = rot;
+                HMD.localRotation = rot;
         }
 
     }
