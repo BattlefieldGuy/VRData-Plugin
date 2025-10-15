@@ -127,6 +127,7 @@ namespace Devs.Jesper
     public enum Controller
     {
         Left,
-        Right
+        Right,
+        Head
     }
 }

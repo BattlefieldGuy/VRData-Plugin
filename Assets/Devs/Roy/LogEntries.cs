@@ -59,7 +59,12 @@ namespace Devs.Roy
                     InputDataRecord.Instance.PositionR,
                     InputDataRecord.Instance.RotationR
                 );
-                // If you want to log head, add similar call here
+                LoggingManager.Instance.AddEntry(
+                    Controller.Head,
+                    DateTime.Now.ToString("o"),
+                    InputDataRecord.Instance.PositionH,
+                    InputDataRecord.Instance.RotationH
+                    );
                 _timer = 0f;
             }
 
