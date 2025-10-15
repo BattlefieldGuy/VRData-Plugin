@@ -13,6 +13,7 @@ public class ReplayPlayer : MonoBehaviour
     [Tooltip("Assign controller GameObjects (transforms will be updated during replay)")]
     public Transform LeftController;
     public Transform RightController;
+    public Transform HMD;
 
     [Tooltip("Playback speed multiplier")]
     public float playbackSpeed = 1f;
@@ -163,6 +164,15 @@ public class ReplayPlayer : MonoBehaviour
             return numeric == 0;
         return controllerValue.Equals("left", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Left.ToString(), StringComparison.OrdinalIgnoreCase);
     }
+    
+    private bool IsHeadController(string controllerValue)
+    {
+        if (int.TryParse(controllerValue, out var numeric))
+        {
+            return numeric == 2;
+        }
+        return controllerValue.Equals("head", StringComparison.OrdinalIgnoreCase);
+    }
 
     private void ApplyEvent(ControllerEvent evt)
     {
@@ -170,6 +180,7 @@ public class ReplayPlayer : MonoBehaviour
 
         bool targetIsLeft = IsLeftController(evt.controller);
         bool targetIsRight = !targetIsLeft;
+        bool targetIsHead = IsHeadController(evt.controller);
 
        
         if (evt.details.position != null && evt.details.position.Length >= 3)
@@ -179,6 +190,8 @@ public class ReplayPlayer : MonoBehaviour
                 LeftController.position = pos;
             else if (targetIsRight && RightController != null)
                 RightController.position = pos;
+            else if (targetIsHead && HMD != null)
+                HMD.position = pos;
         }
 
         
@@ -190,5 +203,6 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsRight && RightController != null)
                 RightController.rotation = rot;
         }
+        
     }
 }
