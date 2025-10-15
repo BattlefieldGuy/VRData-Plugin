@@ -164,7 +164,7 @@ public class ReplayPlayer : MonoBehaviour
             return numeric == 0;
         return controllerValue.Equals("left", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Left.ToString(), StringComparison.OrdinalIgnoreCase);
     }
-    
+
     private bool IsHeadController(string controllerValue)
     {
         if (int.TryParse(controllerValue, out var numeric))
@@ -189,9 +189,13 @@ public class ReplayPlayer : MonoBehaviour
             if (targetIsLeft && LeftController != null)
                 LeftController.localPosition = pos;
             else if (targetIsRight && RightController != null)
-                RightController.position = pos;
+                RightController.localPosition = pos;
             else if (targetIsHead && HMD != null)
+            {
+                Debug.Log("Set HMD position");
                 HMD.position = pos;
+                Debug.Log("HMD position set");
+            }
         }
 
 
@@ -199,10 +203,12 @@ public class ReplayPlayer : MonoBehaviour
         {
             var rot = new Quaternion(evt.details.rotation[0], evt.details.rotation[1], evt.details.rotation[2], evt.details.rotation[3]);
             if (targetIsLeft && LeftController != null)
-                LeftController.rotation = rot;
+                LeftController.localRotation = rot;
             else if (targetIsRight && RightController != null)
-                RightController.rotation = rot;
+                RightController.localRotation = rot;
+            else if (targetIsHead && HMD != null)
+                HMD.rotation = rot;
         }
-        
+
     }
 }
