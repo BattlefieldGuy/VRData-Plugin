@@ -96,7 +96,6 @@ public class ReplayPlayer : MonoBehaviour
         if (events == null || events.Count == 0) return;
 
         CurrentTimeSeconds = Mathf.Clamp(seconds, 0f, DurationSeconds);
-        // recompute nextEventIndex
         DateTime target = sessionStart.AddSeconds(CurrentTimeSeconds);
         nextEventIndex = eventTimes.FindIndex(t => t > target);
         if (nextEventIndex == -1) nextEventIndex = events.Count;
@@ -140,29 +139,41 @@ public class ReplayPlayer : MonoBehaviour
     {
         ControllerEvent lastLeft = null;
         ControllerEvent lastRight = null;
+        ControllerEvent lastHead = null;
+
         for (int i = 0; i < events.Count; i++)
         {
             if (eventTimes[i] > target) break;
             var e = events[i];
             if (e.eventType != null && e.eventType.Equals("position", StringComparison.OrdinalIgnoreCase))
             {
-                if (IsLeftController(e.controller.ToString()))
+                string controllerStr = e.controller.ToString();
+                if (IsLeftController(controllerStr))
                     lastLeft = e;
-                else
+                else if (IsRightController(controllerStr))
                     lastRight = e;
+                else if (IsHeadController(controllerStr))
+                    lastHead = e;
             }
         }
 
         if (lastLeft != null) ApplyEvent(lastLeft);
         if (lastRight != null) ApplyEvent(lastRight);
+        if (lastHead != null) ApplyEvent(lastHead);
     }
 
     private bool IsLeftController(string controllerValue)
     {
-        // controller may be string like "Left" or numeric "0"
         if (int.TryParse(controllerValue, out var numeric))
             return numeric == 0;
         return controllerValue.Equals("left", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Left.ToString(), StringComparison.OrdinalIgnoreCase);
+    }
+    
+    private bool IsRightController(string controllerValue)
+    {
+        if (int.TryParse(controllerValue, out var numeric))
+            return numeric == 1;
+        return controllerValue.Equals("right", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Right.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
     private bool IsHeadController(string controllerValue)
@@ -171,7 +182,7 @@ public class ReplayPlayer : MonoBehaviour
         {
             return numeric == 2;
         }
-        return controllerValue.Equals("head", StringComparison.OrdinalIgnoreCase);
+        return controllerValue.Equals("head", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Head.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
     private void ApplyEvent(ControllerEvent evt)
@@ -179,7 +190,7 @@ public class ReplayPlayer : MonoBehaviour
         if (evt == null || evt.details == null) return;
 
         bool targetIsLeft = IsLeftController(evt.controller);
-        bool targetIsRight = !targetIsLeft;
+        bool targetIsRight = IsRightController(evt.controller);
         bool targetIsHead = IsHeadController(evt.controller);
 
 
