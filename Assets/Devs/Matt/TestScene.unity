@@ -399,7 +399,7 @@ MonoBehaviour:
   LeftController: {fileID: 1803340923}
   RightController: {fileID: 659731097}
   HMD: {fileID: 543450652453467572}
-  Body: {fileID: 0}
+  Body: {fileID: 1131364190}
   playbackSpeed: 1
   loop: 0
 --- !u!1 &1742478225
