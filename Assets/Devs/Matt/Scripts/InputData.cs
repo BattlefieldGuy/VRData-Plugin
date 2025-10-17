@@ -7,6 +7,7 @@ public class InputData : MonoBehaviour
     public InputDevice RightController;
     public InputDevice LeftController;
     public InputDevice HMD;
+    public InputDevice Body;
 
 
     void Update()
@@ -23,6 +24,8 @@ public class InputData : MonoBehaviour
             InitializeInputDevice(InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left, ref LeftController);
         if (!HMD.isValid)
             InitializeInputDevice(InputDeviceCharacteristics.HeadMounted, ref HMD);
+        if (!Body.isValid)
+            InitializeInputDevice(InputDeviceCharacteristics.Camera, ref Body);
     }
 
     private void InitializeInputDevice(InputDeviceCharacteristics inputCharateristics, ref InputDevice inputDevice)
