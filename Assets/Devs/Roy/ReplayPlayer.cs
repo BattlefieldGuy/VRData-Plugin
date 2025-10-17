@@ -214,7 +214,7 @@ public class ReplayPlayer : MonoBehaviour
                 RightController.localPosition = pos;
             else if (targetIsHead && HMD != null)
             {
-                HMD.position = pos;
+                HMD.localPosition = pos;
             }
             else if (targetIsBody && Body != null)
             {
@@ -231,7 +231,7 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsRight && RightController != null)
                 RightController.localRotation = rot;
             else if (targetIsHead && HMD != null)
-                HMD.rotation = rot;
+                HMD.localRotation = rot;
             else if (targetIsBody && Body != null)
                 Body.rotation = rot;
         }
