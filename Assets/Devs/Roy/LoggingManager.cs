@@ -151,6 +151,7 @@ public class LoggingManager : MonoBehaviour
                 fileName += ".json";
 
             string fullPath = Path.Combine(folderPath, fileName);
+            string fullPathAutoSave = Path.Combine(folderPath, autosaveFileName);
             string baseName = Path.GetFileNameWithoutExtension(fileName);
             string ext = Path.GetExtension(fileName);
             int count = 1;
@@ -161,12 +162,22 @@ public class LoggingManager : MonoBehaviour
                 fullPath = Path.Combine(folderPath, tempFileName);
                 count++;
             }
-
             var wrapper = new BatchEventsRequest
             {
                 sessionId = sessionId,
                 events = new List<EventData>(eventsBuffer)
             };
+            
+            if (File.Exists(Path.Combine(folderPath, tempStorageFileName)))
+            {
+                string oldJson = File.ReadAllText(fullPathAutoSave);
+                var oldWrapper = JsonConvert.DeserializeObject<BatchEventsRequest>(oldJson);
+                if (oldWrapper != null && oldWrapper.events != null)
+                {
+                    wrapper.events.InsertRange(0, oldWrapper.events);
+                }
+            }
+
 
             string json = JsonConvert.SerializeObject(wrapper, Formatting.Indented);
             File.WriteAllText(fullPath, json);
