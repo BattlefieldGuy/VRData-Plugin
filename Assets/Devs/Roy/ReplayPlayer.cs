@@ -14,6 +14,7 @@ public class ReplayPlayer : MonoBehaviour
     public Transform LeftController;
     public Transform RightController;
     public Transform HMD;
+    public Transform Body;
 
     [Tooltip("Playback speed multiplier")]
     public float playbackSpeed = 1f;
@@ -184,6 +185,15 @@ public class ReplayPlayer : MonoBehaviour
         }
         return controllerValue.Equals("head", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Head.ToString(), StringComparison.OrdinalIgnoreCase);
     }
+    
+    private bool IsBodyController(string controllerValue)
+    {
+        if (int.TryParse(controllerValue, out var numeric))
+        {
+            return numeric == 2;
+        }
+        return controllerValue.Equals("body", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Body.ToString(), StringComparison.OrdinalIgnoreCase);
+    }
 
     private void ApplyEvent(ControllerEvent evt)
     {
@@ -192,6 +202,7 @@ public class ReplayPlayer : MonoBehaviour
         bool targetIsLeft = IsLeftController(evt.controller);
         bool targetIsRight = IsRightController(evt.controller);
         bool targetIsHead = IsHeadController(evt.controller);
+        bool targetIsBody = IsBodyController(evt.controller);
 
 
         if (evt.details.position != null && evt.details.position.Length >= 3)
@@ -203,9 +214,11 @@ public class ReplayPlayer : MonoBehaviour
                 RightController.localPosition = pos;
             else if (targetIsHead && HMD != null)
             {
-                Debug.Log("Set HMD position");
-                HMD.localPosition = pos;
-                Debug.Log("HMD position set");
+                HMD.position = pos;
+            }
+            else if (targetIsBody && Body != null)
+            {
+                Body.position = pos;
             }
         }
 
@@ -218,7 +231,9 @@ public class ReplayPlayer : MonoBehaviour
             else if (targetIsRight && RightController != null)
                 RightController.localRotation = rot;
             else if (targetIsHead && HMD != null)
-                HMD.localRotation = rot;
+                HMD.rotation = rot;
+            else if (targetIsBody && Body != null)
+                Body.rotation = rot;
         }
 
     }
