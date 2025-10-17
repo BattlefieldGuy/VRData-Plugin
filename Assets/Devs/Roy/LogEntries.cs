@@ -69,7 +69,7 @@ namespace Devs.Roy
                     Controller.Body,
                     DateTime.Now.ToString("o"),
                     InputDataRecord.Instance.PositionB,
-                    Quaternion.identity
+                    InputDataRecord.Instance.RotationB
                 );
                 _timer = 0f;
             }
