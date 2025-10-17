@@ -95,9 +95,8 @@ public class InputDataRecord : MonoBehaviour
         inputData.HMD.TryGetFeatureValue(CommonUsages.devicePosition, out PositionH);
 
         inputData.HMD.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationH);
-
-        //body
-        PositionB = this.transform.position;
+        
+        inputData.Body.TryGetFeatureValue(CommonUsages.devicePosition, out PositionB);
 
     }
 }
