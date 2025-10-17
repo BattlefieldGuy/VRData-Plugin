@@ -25,7 +25,6 @@ namespace Devs.Roy
             if (File.Exists(filePath))
             {
                 string jsonContent = File.ReadAllText(filePath);
-                Debug.Log("JSON Content: " + jsonContent);
 
                 session = JsonConvert.DeserializeObject<SessionResponse>(jsonContent);
             }

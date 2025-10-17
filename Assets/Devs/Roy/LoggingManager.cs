@@ -44,18 +44,6 @@ public class LoggingManager : MonoBehaviour
 #endif
     }
 
-    private void Start()
-    {
-        foreach (var evt in JsonReader.Instance.GetJsonSession().events)
-        {
-            Debug.Log("Controller: " + evt.controller +
-                      " EventType: " + evt.eventType +
-                      " Timestamp: " + evt.timestamp +
-                      " Position: " + evt.details.position[0] + "," + evt.details.position[1] + "," + evt.details.position[2] +
-                      " Rotation: " + evt.details.rotation[0] + "," + evt.details.rotation[1] + "," + evt.details.rotation[2] + "," + evt.details.rotation[3]);
-        }
-    }
-
     private void Update()
     {
         if (autosaveFrequency > 0 && Time.time % autosaveFrequency < 0.02f && eventsBuffer.Count > 0 && LogEntries.LogEnabled)
