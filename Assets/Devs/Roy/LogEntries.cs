@@ -65,6 +65,12 @@ namespace Devs.Roy
                     InputDataRecord.Instance.PositionH,
                     InputDataRecord.Instance.RotationH
                     );
+                LoggingManager.Instance.AddEntry(
+                    Controller.Body,
+                    DateTime.Now.ToString("o"),
+                    InputDataRecord.Instance.PositionB,
+                    Quaternion.identity
+                );
                 _timer = 0f;
             }
 

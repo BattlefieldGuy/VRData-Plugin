@@ -128,6 +128,7 @@ namespace Devs.Jesper
     {
         Left,
         Right,
-        Head
+        Head,
+        Body
     }
 }
