@@ -36,6 +36,7 @@ public class InputDataRecord : MonoBehaviour
     [Header("Body")]
     [Space(5)]
     public Vector3 PositionB;
+    public Quaternion RotationB;
 
 
     private InputData inputData;
@@ -96,7 +97,9 @@ public class InputDataRecord : MonoBehaviour
 
         inputData.HMD.TryGetFeatureValue(CommonUsages.deviceRotation, out RotationH);
         
-        inputData.Body.TryGetFeatureValue(CommonUsages.devicePosition, out PositionB);
+        PositionB = transform.position;
+        
+        RotationB = transform.rotation;
 
     }
 }

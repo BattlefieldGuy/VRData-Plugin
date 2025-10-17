@@ -25,7 +25,7 @@ public class InputData : MonoBehaviour
         if (!HMD.isValid)
             InitializeInputDevice(InputDeviceCharacteristics.HeadMounted, ref HMD);
         if (!Body.isValid)
-            InitializeInputDevice(InputDeviceCharacteristics.Camera, ref Body);
+            InitializeInputDevice(InputDeviceCharacteristics.Simulated6DOF, ref Body);
     }
 
     private void InitializeInputDevice(InputDeviceCharacteristics inputCharateristics, ref InputDevice inputDevice)

@@ -190,7 +190,7 @@ public class ReplayPlayer : MonoBehaviour
     {
         if (int.TryParse(controllerValue, out var numeric))
         {
-            return numeric == 2;
+            return numeric == 3;
         }
         return controllerValue.Equals("body", StringComparison.OrdinalIgnoreCase) || controllerValue.Equals(Controller.Body.ToString(), StringComparison.OrdinalIgnoreCase);
     }
